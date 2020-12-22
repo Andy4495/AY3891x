@@ -63,48 +63,106 @@ AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, b
 // and use "AY3891::NO_PIN" for pins that are not tied to the microcontroller.
 
 void AY3891x::begin() {
-  byte i;
 
-  /// Read datasheet: confirm whether DA lines should be output mode in all
-  /// cases except when reading a value, or Hi-Z (input mode) except when
-  /// writing. (Since these are address lines without a separate chip select,
-  /// it seems like these would need to be output always to avoid floating
-  /// values).
-  /// .... DA Line setup here ...
+  // DA line configuration depends on whether we are setting address,
+  // reading, or writing to the chip. So set the DA lines to INPUT mode
+  // (high impedance) and let the specific read/write commands set the
+  // proper pinModes.
+  daPinsInput();
 
   if (_BDIR_pin  != NO_PIN) pinMode(_BDIR_pin,  OUTPUT);
   if (_BC2_pin   != NO_PIN) pinMode(_BC2_pin,   OUTPUT);
   if (_BC1_pin   != NO_PIN) pinMode(_BC1_pin,   OUTPUT);
-  /// Need to set up A8 and A9 to proper levels.
-  /// Pins have internal pullup (A8), or pulldown (A9) so need
-  /// to use OUTPUT mode only when pulling to opposite level.
-  /// Also, may need to use these as a sort of chip-select
-  if (_A9_pin    != NO_PIN) pinMode(_BDIR_pin,  OUTPUT);
-  if (_A8_pin    != NO_PIN) pinMode(_BDIR_pin,  OUTPUT);
-  /// Need to add a reset pin sequence and then let chips input pullup hold it high.
-  if (_reset_pin != NO_PIN) pinMode(_reset_pin, OUTPUT);
+  // Set up A8 and A9 to proper levels.
+  // Pins have internal pullup (A8), or pulldown (A9) so need
+  // to use OUTPUT mode only when pulling to opposite level.
+  if (_A9_pin    != NO_PIN) pinMode(_BDIR_pin,  INPUT);
+  if (_A8_pin    != NO_PIN) pinMode(_BDIR_pin,  INPUT);
+  // Reset the chip so it is ready to program.
+  resetChip();
   /// Clock is not supported, so this will always be set to NO_PIN
   if (_clock_pin != NO_PIN) pinMode(_clock_pin, OUTPUT);
 }
 
-void AY3891x::write(uint16_t address, byte data) {
-/// Define the vaarious register names in header file
+void AY3891x::latchAddressMode(byte regAddr) {
+  // Latch address steps:
+  // 1. Set bus mode to INACTIVE
+  // 2. Configure DA pins to pinMode OUTPUT
+  // 3. Put register address on DA pins
+  // 4. Set bus mode to LATCH_ADDR
+  // 5. Set bus mode to INACTIVE
+  // Leave DA pins in OUTPUT mode
+  latchAddressMode(regAddr);
+  setMode(INACTIVE);
+  daPinsOutput(regAddr & 0x0F); // Register address is 4 lsb
+  setMode(LATCH_ADDR);
+  // delay is not needed here because code is slow enough (300 ns)
+  setMode(INACTIVE);
+
 }
 
-byte AY3891x::read(uint16_t address) {
-
+void AY3891x::write(uint16_t regAddr, byte data) {
+  // Write to chip register:
+  // 1. Latch the register address
+  // 2. Set DA pins to output
+  // 3. Set bits on DA pins
+  // 4. Set bus mode to WRITE_DATA
+  // 5. delay 1800 ns (3 us)
+  // 6. Set BC to INACTIVE
+  // 7. Set BA pins to pinMode INPUT (high impedance)
+  latchAddressMode(regAddr);
+  daPinsOutput(data);
+  setMode(WRITE_DATA);
+  delayMicroseconds(3);
+  setMode(INACTIVE);
+  daPinsInput();
 }
 
-void AY3891x::setAddressLines(byte address) {
+byte AY3891x::read(uint16_t regAddr) {
+  // Read from chip register:
+  // 1. Latch the address register
+  // 2. Set DA pins to input mode
+  // 3. Set bus mode to READ_DATA
+  // 4. Read the data on DA pins
+  // 5. Set bus mode to INACTIVE
+  byte returnData = 0;
+
+  latchAddressMode(regAddr)
+  daPinsInput();
+  setMode(READ_DATA);
+  for (byte i = 0; i < NUM_DA_LINES; i++) {
+    returnData = returnData | (digitalRead(_DA_pin[i]) << i);
+  }
+  setMode(INACTIVE); 
+}
+
+void AY3891x::daPinsInput() {
+  byte i;
+
+  for (i = 0; i < NUM_DA_LINES; i++) {
+    if (_DA_pin[i] != NO_PIN) pinMode(_DA_pin[i], INPUT);
+  }
+}
+
+void AY3891x::daPinsOutput(byte data) {
   byte i;
 
   for (i = 0; i < NUM_DA_LINES; i++) {
     if (_DA_pin[i] != NO_PIN) pinMode(_DA_pin[i], OUTPUT);
   }
+
+  for (i = 0; i < NUM_DA_LINES; i++) {
+    if (_DA_pin[i] != NO_PIN) {
+      digitalWrite(_DA_pin[i], data && 0x01);
+      data = data >> 1;
+    }
+  }
 }
 
-void AY3891x::reset() {
+
+void AY3891x::resetChip() {
   if (_reset_pin != NO_PIN) {
+    pinMode(_reset_pin, INPUT);
     digitalWrite(_reset_pin, LOW);
     pinMode(_reset_pin, OUTPUT);
     delayMicroseconds(6);        // From datasheet: tRW 5us (min)
@@ -115,7 +173,50 @@ void AY3891x::reset() {
 // Since it is possible to order the AY-3-891x chip with a mask programmed
 // address other than 0, include a function to try all 16 possible setAddresses
 // and return the valied address.
-byte AY3891x::findAddress() {
+byte AY3891x::findChipAddress() {
   /// Imiplement address check here, and use this in one of the example sketches.
-  return 0; 
+  return 0;
+}
+
+void AY3891x::setChipAddress(byte address) {
+  _chipAddress = address;
+}
+
+byte AY3891x::getChipAddress() {
+  return _chipAddress;
+}
+
+void AY3891x::setMode(byte mode) {
+  switch (mode) {
+    case INACTIVE:   // 0b010
+      if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, LOW);
+      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
+      if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  LOW);
+      break;
+
+    case LATCH_ADDR: // 0b111
+      if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, HIGH);
+      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
+      if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  HIGH);
+      break;
+
+    case READ_DATA:  // 0b011
+      if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, LOW);
+      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
+      if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  HIGH);
+      break;
+
+    case WRITE_DATA: // 0b110
+      if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, HIGH);
+      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
+      if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  LOW);
+      break;
+
+    default:
+      // Set pins the same as INACTIVE mode 0b010
+      if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, LOW);
+      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
+      if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  LOW);
+      break;
+  }
 }
