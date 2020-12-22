@@ -28,7 +28,7 @@ AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, b
   _A9_pin    = A9;
   _A8_pin    = A8;
   _reset_pin = reset;
-  _clock_pin = NO_PIN; /// Controlling this pin is not supported at this time.
+  _clock_pin = clock; /// Controlling this pin is not supported at this time.
 }
 
 // Minimal pins connected to microcontroller
@@ -80,8 +80,8 @@ void AY3891x::begin() {
   if (_A8_pin    != NO_PIN) pinMode(_BDIR_pin,  INPUT);
   // Reset the chip so it is ready to program.
   resetChip();
-  /// Clock is not supported, so this will always be set to NO_PIN
-  if (_clock_pin != NO_PIN) pinMode(_clock_pin, OUTPUT);
+  /// Clock is not currently supported, so configure it as high impedance
+  if (_clock_pin != NO_PIN) pinMode(_clock_pin, INPUT);
 }
 
 void AY3891x::latchAddressMode(byte regAddr) {
@@ -127,13 +127,14 @@ byte AY3891x::read(uint16_t regAddr) {
   // 5. Set bus mode to INACTIVE
   byte returnData = 0;
 
-  latchAddressMode(regAddr)
+  latchAddressMode(regAddr);
   daPinsInput();
   setMode(READ_DATA);
   for (byte i = 0; i < NUM_DA_LINES; i++) {
     returnData = returnData | (digitalRead(_DA_pin[i]) << i);
   }
-  setMode(INACTIVE); 
+  setMode(INACTIVE);
+  return returnData;
 }
 
 void AY3891x::daPinsInput() {

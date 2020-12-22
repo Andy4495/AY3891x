@@ -19,11 +19,11 @@ public:
          // Sound chip register addresses.
          // Registers that use <8 bits fill them lsb first
          ChA_Tone_Period_Fine_Reg   = 0,  // 8 bits
-         ChA_Tone_Period Coarse_Reg = 1,  // 4 bits
+         ChA_Tone_Period_Coarse_Reg = 1,  // 4 bits
          ChB_Tone_Period_Fine_Reg   = 2,  // 8 bits
-         ChB_Tone_Period Coarse_Reg = 3,  // 4 bits
+         ChB_Tone_Period_Coarse_Reg = 3,  // 4 bits
          ChC_Tone_Period_Fine_Reg   = 4,  // 8 bits
-         ChC_Tone_Period Coarse_Reg = 5,  // 4 bits
+         ChC_Tone_Period_Coarse_Reg = 5,  // 4 bits
          Noise_Period_Reg           = 6,  // 5 bits
          Enable_Reg                 = 7,  // 8 bits
          ChA_Amplitude              = 8,  // 5 bits
@@ -65,7 +65,7 @@ public:
 
 private:
   enum {NUM_DA_LINES = 8};
-  enum {INACTIVE, LATCH_ADDR, READ_DATA, WRITE_DATA}
+  enum {INACTIVE, LATCH_ADDR, READ_DATA, WRITE_DATA};
   byte _DA_pin[NUM_DA_LINES];
   byte _BDIR_pin, _BC2_pin, _BC1_pin;
   byte _A9_pin, _A8_pin;
@@ -73,7 +73,9 @@ private:
   byte _chipAddress; // This is typically 0b0000, but can be mask-programmed at factory for any 4-bit value.
 
   void daPinsInput();
-  void daPinsOutput(byte data); 
+  void daPinsOutput(byte data);
+  void latchAddressMode(byte regAddr);
+  void setMode(byte mode);
 };
 
 #endif
