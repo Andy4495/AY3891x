@@ -56,8 +56,8 @@ public:
   // and use "AY3891::NO_PIN" for pins that are not tied to the microcontroller.
 
   void begin();
-  void write(uint16_t regAddr, byte data);
-  byte read(uint16_t regAddr);
+  void write(byte regAddr, byte data);
+  byte read(byte regAddr);
   void resetChip();
   byte findChipAddress();
   void setChipAddress(byte address);

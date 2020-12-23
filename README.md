@@ -21,6 +21,38 @@ Usage
 Constructor
 <several variations>
 
+Driving Clock from Arduino
+---
+From https://www.instructables.com/Arduino-MIDI-Chiptune-Synthesizer/. Code by Ian Harvey.
+```
+static const byte clkOUT = 9;
+
+static const ushort DIVISOR = 7; // Set for 1MHz clock
+
+static void clockSetup()
+{
+ // Timer 1 setup for Mega32U4 devices
+ //
+ // Use CTC mode: WGM13..0 = 0100
+ // Toggle OC1A on Compare Match: COM1A1..0 = 01
+ // Use ClkIO with no prescaling: CS12..0 = 001
+ // Interrupts off: TIMSK0 = 0
+ // OCR0A = interval value
+
+ TCCR1A = (1 << COM1A0);
+ TCCR1B = (1 << WGM12) | (1 << CS10);
+ TCCR1C = 0;
+ TIMSK1 = 0;
+ OCR1AH = 0;
+ OCR1AL = DIVISOR; // NB write high byte first
+
+}
+
+pinMode(clkOUT, OUTPUT);
+digitalWrite(clkOUT, LOW);
+clockSetup();
+```
+
 
 
 

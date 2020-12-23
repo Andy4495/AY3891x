@@ -29,6 +29,7 @@ AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, b
   _A8_pin    = A8;
   _reset_pin = reset;
   _clock_pin = clock; /// Controlling this pin is not supported at this time.
+  _chipAddress = 0; // Assume address 0 unless manually changed
 }
 
 // Minimal pins connected to microcontroller
@@ -56,7 +57,7 @@ AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, b
           _A8_pin    = NO_PIN;
           _reset_pin = NO_PIN;
           _clock_pin = NO_PIN;
-
+          _chipAddress = 0; // Assume address 0 unless manually changed
 }
 
 // For other combinations of pin connections, use the "All pins" constructor
@@ -92,16 +93,15 @@ void AY3891x::latchAddressMode(byte regAddr) {
   // 4. Set bus mode to LATCH_ADDR
   // 5. Set bus mode to INACTIVE
   // Leave DA pins in OUTPUT mode
-  latchAddressMode(regAddr);
   setMode(INACTIVE);
-  daPinsOutput(regAddr & 0x0F); // Register address is 4 lsb
+  daPinsOutput(_chipAddress | regAddr); // Register address is 4 lsb
   setMode(LATCH_ADDR);
   // delay is not needed here because code is slow enough (300 ns)
   setMode(INACTIVE);
 
 }
 
-void AY3891x::write(uint16_t regAddr, byte data) {
+void AY3891x::write(byte regAddr, byte data) {
   // Write to chip register:
   // 1. Latch the register address
   // 2. Set DA pins to output
@@ -118,7 +118,7 @@ void AY3891x::write(uint16_t regAddr, byte data) {
   daPinsInput();
 }
 
-byte AY3891x::read(uint16_t regAddr) {
+byte AY3891x::read(byte regAddr) {
   // Read from chip register:
   // 1. Latch the address register
   // 2. Set DA pins to input mode
@@ -154,7 +154,7 @@ void AY3891x::daPinsOutput(byte data) {
 
   for (i = 0; i < NUM_DA_LINES; i++) {
     if (_DA_pin[i] != NO_PIN) {
-      digitalWrite(_DA_pin[i], data && 0x01);
+      digitalWrite(_DA_pin[i], data & 0x01);
       data = data >> 1;
     }
   }
@@ -175,12 +175,35 @@ void AY3891x::resetChip() {
 // address other than 0, include a function to try all 16 possible setAddresses
 // and return the valied address.
 byte AY3891x::findChipAddress() {
-  /// Imiplement address check here, and use this in one of the example sketches.
-  return 0;
+  byte testAddress = 0x00;
+  byte readValue;
+  byte addressFound = 0xFF;  // 0xFF indicates address check failed.
+  byte prevAddress;
+
+  prevAddress = getChipAddress();
+
+  for(byte i = 0; i < 0x10; i++) {
+    setChipAddress(testAddress);
+    write(Env_Period_Fine_Reg, 0x7A);
+    readValue = read(Env_Period_Fine_Reg);
+    if (readValue == 0x7A) {
+      addressFound = 0;
+      break;
+    }
+    testAddress = testAddress + 0x10;
+  }
+
+  if (addressFound != 0xFF) addressFound = testAddress;
+
+  setChipAddress(prevAddress);
+
+  return addressFound;
 }
 
 void AY3891x::setChipAddress(byte address) {
-  _chipAddress = address;
+  // Note that only the 4 msb are used for the address.
+  // The lower 4 bits are used to select the register.
+  _chipAddress = address & 0xF0;
 }
 
 byte AY3891x::getChipAddress() {
