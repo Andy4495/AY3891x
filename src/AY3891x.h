@@ -50,7 +50,7 @@ public:
   // - RESET tied high or to an external reset circuit
   // - CLOCK connected to an independent clock source
   AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
-          byte  BDIR, byte BC1);
+          byte  BDIR, byte BC2, byte BC1);
 
   // For other combinations of pin connections, use the "All pins" constructor
   // and use "AY3891::NO_PIN" for pins that are not tied to the microcontroller.
@@ -65,7 +65,7 @@ public:
 
 private:
   enum {NUM_DA_LINES = 8};
-  enum {INACTIVE, LATCH_ADDR, READ_DATA, WRITE_DATA};
+  enum {INACTIVE_000, INACTIVE_010, LATCH_ADDR, READ_DATA, WRITE_DATA};
   byte _DA_pin[NUM_DA_LINES];
   byte _BDIR_pin, _BC2_pin, _BC1_pin;
   byte _A9_pin, _A8_pin;

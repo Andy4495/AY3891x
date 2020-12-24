@@ -34,13 +34,12 @@ AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, b
 
 // Minimal pins connected to microcontroller
 // Assumes:
-// - BC2 tied HIGH
 // - A8 tied HIGH or left unconnected
 // - A9 tied LOW or left unconnected
 // - RESET tied high or to an external reset circuit
 // - CLOCK connected to an independent clock source
 AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
-        byte  BDIR, byte BC1) {
+        byte  BDIR, byte BC2, byte BC1) {
 
           _DA_pin[7] = DA7;
           _DA_pin[6] = DA6;
@@ -51,7 +50,7 @@ AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, b
           _DA_pin[1] = DA1;
           _DA_pin[0] = DA0;
           _BDIR_pin  = BDIR;
-          _BC2_pin   = NO_PIN;
+          _BC2_pin   = BC2;
           _BC1_pin   = BC1;
           _A9_pin    = NO_PIN;
           _A8_pin    = NO_PIN;
@@ -74,6 +73,7 @@ void AY3891x::begin() {
   if (_BDIR_pin  != NO_PIN) pinMode(_BDIR_pin,  OUTPUT);
   if (_BC2_pin   != NO_PIN) pinMode(_BC2_pin,   OUTPUT);
   if (_BC1_pin   != NO_PIN) pinMode(_BC1_pin,   OUTPUT);
+  setMode(INACTIVE_000);
   // Set up A8 and A9 to proper levels.
   // Pins have internal pullup (A8), or pulldown (A9) so need
   // to use OUTPUT mode only when pulling to opposite level.
@@ -93,11 +93,11 @@ void AY3891x::latchAddressMode(byte regAddr) {
   // 4. Set bus mode to LATCH_ADDR
   // 5. Set bus mode to INACTIVE
   // Leave DA pins in OUTPUT mode
-  setMode(INACTIVE);
+  setMode(INACTIVE_000);
   daPinsOutput(_chipAddress | regAddr); // Register address is 4 lsb
   setMode(LATCH_ADDR);
   // delay is not needed here because code is slow enough (300 ns)
-  setMode(INACTIVE);
+  setMode(INACTIVE_000);
 
 }
 
@@ -107,14 +107,16 @@ void AY3891x::write(byte regAddr, byte data) {
   // 2. Set DA pins to output
   // 3. Set bits on DA pins
   // 4. Set bus mode to WRITE_DATA
-  // 5. delay 1800 ns (3 us)
+  // 5. delay 1800 ns (3 us) ///-> Not sure where I came up with this number
   // 6. Set BC to INACTIVE
   // 7. Set BA pins to pinMode INPUT (high impedance)
   latchAddressMode(regAddr);
+  setMode(INACTIVE_010);
   daPinsOutput(data);
   setMode(WRITE_DATA);
-  delayMicroseconds(3);
-  setMode(INACTIVE);
+  // delayMicroseconds(3);
+  setMode(INACTIVE_010);
+  setMode(INACTIVE_000);
   daPinsInput();
 }
 
@@ -129,11 +131,13 @@ byte AY3891x::read(byte regAddr) {
 
   latchAddressMode(regAddr);
   daPinsInput();
+  setMode(INACTIVE_010);
   setMode(READ_DATA);
   for (byte i = 0; i < NUM_DA_LINES; i++) {
     returnData = returnData | (digitalRead(_DA_pin[i]) << i);
   }
-  setMode(INACTIVE);
+  setMode(INACTIVE_010);
+  setMode(INACTIVE_000);
   return returnData;
 }
 
@@ -212,34 +216,40 @@ byte AY3891x::getChipAddress() {
 
 void AY3891x::setMode(byte mode) {
   switch (mode) {
-    case INACTIVE:   // 0b010
+    case INACTIVE_000: // 0b000
+      if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, LOW);
+      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  LOW);
+      if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  LOW);
+      break;
+
+    case INACTIVE_010: // 0b010
       if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, LOW);
       if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
       if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  LOW);
       break;
 
-    case LATCH_ADDR: // 0b111
-      if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, HIGH);
-      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
+    case LATCH_ADDR:   // 0b001
+      if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, LOW);
+      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  LOW);
       if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  HIGH);
       break;
 
-    case READ_DATA:  // 0b011
+    case READ_DATA:    // 0b011
       if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, LOW);
       if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
       if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  HIGH);
       break;
 
-    case WRITE_DATA: // 0b110
+    case WRITE_DATA:   // 0b110
       if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, HIGH);
       if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
       if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  LOW);
       break;
 
     default:
-      // Set pins the same as INACTIVE mode 0b010
+      // Set pins the same as INACTIVE mode 0b000
       if (_BDIR_pin != NO_PIN) digitalWrite(_BDIR_pin, LOW);
-      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  HIGH);
+      if (_BC2_pin  != NO_PIN) digitalWrite(_BC2_pin,  LOW);
       if (_BC1_pin  != NO_PIN) digitalWrite(_BC1_pin,  LOW);
       break;
   }
