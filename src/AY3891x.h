@@ -36,7 +36,8 @@ public:
          IO_Port_B_Reg              = 15  // 8 bits
       };
 
-  // All pins connected to microcontroller
+  // Constructor for all pins 
+  // Use "AY3891::NO_PIN" for pins that are not tied to the microcontroller.
   AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
           byte  BDIR, byte BC2, byte BC1,
           byte  A9,   byte A8,
@@ -51,9 +52,6 @@ public:
   // - CLOCK connected to an independent clock source
   AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
           byte  BDIR, byte BC2, byte BC1);
-
-  // For other combinations of pin connections, use the "All pins" constructor
-  // and use "AY3891::NO_PIN" for pins that are not tied to the microcontroller.
 
   void begin();
   void write(byte regAddr, byte data);

@@ -4,11 +4,47 @@
 
    12/21/20 - A.T. - Original
 
+   The AY3891x chip uses an unconventional microcontroller interfacing
+   method. Instead of using a chip select signal, the chip requires
+   specific timing and sequencing on the bus control signals (BDIR, BC2, BC1).
+   In particular, the skew between the bus control signals is required
+   to be less than 50ns when changing states between INACTIVE, LATCH_ADDRESS,
+   READ, and WRITE (referred with symbol "tBD" and named "Associative Time
+   Delay" in the datasheet). The built-in, platform-agnostic digitalWrite()
+   function is much too slow to meet this timing spec when changing more than
+   one pin at a time. So, to keep this library code as generic as
+   possible, it is therefore required to connect all three bus
+   control signals to the microcontroller, even though the AY3891
+   datasheet mentions that it is possible to tie BC2 high and control
+   the states with just BDIR and BC1.
+
+   By using all three signals, it is possible to switch between the states
+   by only changing one bus control signal at a time between states. This
+   meets the timing constraints regardless of how long digitalWrite() actually
+   takes to run, since only one signal is changing for each state change.
+
+   So the pin configurations for each state change is as follows, with the
+   pins ordered BDIR, BC2, BC1 left to right:
+
+   LATCH_ADDRESS:
+   000 (INACTIVE)-> 001 -> 000 (INACTIVE)
+   READ:
+   000 (INACTIVE) -> 010 (INACTIVE) -> 011 -> 010 (INACTIVE) -> (INACTIVE)
+   WRITE:
+   000 (INACTIVE) -> 010 (INACTIVE) -> 110 -> 010 (INACTIVE) -> (INACTIVE)
+
+   Using two diffent INACTIVE state pin configurations allows the Library
+   to change a single pin at a time between states. So while this requires
+   an extra I/O pin to be used, the code is simpler and more generic.
+
+   /// Note, the AY38913 chip variation has a chip-select signal which
+       is not currently supported by this library.
+
 */
 
 #include "AY3891x.h"
 
-// All pins connected to microcontroller
+// Constructor with all possible pins
 AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
         byte  BDIR, byte BC2, byte BC1,
         byte  A9,   byte A8,
@@ -32,7 +68,7 @@ AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, b
   _chipAddress = 0; // Assume address 0 unless manually changed
 }
 
-// Minimal pins connected to microcontroller
+// Constructor for minimal pins connected to microcontroller
 // Assumes:
 // - A8 tied HIGH or left unconnected
 // - A9 tied LOW or left unconnected
@@ -64,23 +100,27 @@ AY3891x::AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, b
 
 void AY3891x::begin() {
 
-  // DA line configuration depends on whether we are setting address,
+  // DA line configuration depends on whether we are latching the address,
   // reading, or writing to the chip. So set the DA lines to INPUT mode
-  // (high impedance) and let the specific read/write commands set the
+  // (high impedance) and let the specific read/write/latch commands set the
   // proper pinModes.
   daPinsInput();
 
+  // Set up the bus control signals. These are always outputs.
   if (_BDIR_pin  != NO_PIN) pinMode(_BDIR_pin,  OUTPUT);
   if (_BC2_pin   != NO_PIN) pinMode(_BC2_pin,   OUTPUT);
   if (_BC1_pin   != NO_PIN) pinMode(_BC1_pin,   OUTPUT);
   setMode(INACTIVE_000);
+
   // Set up A8 and A9 to proper levels.
   // Pins have internal pullup (A8), or pulldown (A9) so need
   // to use OUTPUT mode only when pulling to opposite level.
   if (_A9_pin    != NO_PIN) pinMode(_BDIR_pin,  INPUT);
   if (_A8_pin    != NO_PIN) pinMode(_BDIR_pin,  INPUT);
+
   // Reset the chip so it is ready to program.
   resetChip();
+
   /// Clock is not currently supported, so configure it as high impedance
   if (_clock_pin != NO_PIN) pinMode(_clock_pin, INPUT);
 }
@@ -96,9 +136,8 @@ void AY3891x::latchAddressMode(byte regAddr) {
   setMode(INACTIVE_000);
   daPinsOutput(_chipAddress | regAddr); // Register address is 4 lsb
   setMode(LATCH_ADDR);
-  // delay is not needed here because code is slow enough (300 ns)
+  // delay is not needed here because code is slow enough (300 ns min per datasheet)
   setMode(INACTIVE_000);
-
 }
 
 void AY3891x::write(byte regAddr, byte data) {
@@ -107,16 +146,16 @@ void AY3891x::write(byte regAddr, byte data) {
   // 2. Set DA pins to output
   // 3. Set bits on DA pins
   // 4. Set bus mode to WRITE_DATA
-  // 5. delay 1800 ns (3 us) ///-> Not sure where I came up with this number
-  // 6. Set BC to INACTIVE
-  // 7. Set BA pins to pinMode INPUT (high impedance)
+  // 5. Set BC to INACTIVE
+  // 6. Set BA pins to pinMode INPUT (high impedance)
   latchAddressMode(regAddr);
   setMode(INACTIVE_010);
   daPinsOutput(data);
+  // The Write Data Pulse Width tDW has a max time of 10 us per the datasheet
+  // tDW = time that WRITE_DATA mode is enabled before going back to INACTIVE
   setMode(WRITE_DATA);
-  // delayMicroseconds(3);
   setMode(INACTIVE_010);
-  setMode(INACTIVE_000);
+//  setMode(INACTIVE_000);   // This is not needed since latchAddressMode() changes to 000
   daPinsInput();
 }
 
@@ -137,7 +176,7 @@ byte AY3891x::read(byte regAddr) {
     returnData = returnData | (digitalRead(_DA_pin[i]) << i);
   }
   setMode(INACTIVE_010);
-  setMode(INACTIVE_000);
+//  setMode(INACTIVE_000);   // This is not needed since latchAddressMode() changes to 000
   return returnData;
 }
 

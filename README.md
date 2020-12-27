@@ -5,6 +5,10 @@ Arduino library for General Instrument AY-3-8910/AY-3-8912/AY-3-8913 Programmabl
 
 All three chips have the same sound generator functionality and programming interface and only differ by the number of general purpose I/O pins available on the IC package. These I/O pins are not related to the sound generation functions.
 
+This library has only been tested with the AY-3-8910 variant of the chip.
+
+The AY-3-8913 variant does not have a BC2 pin, but includes a Chip Select signal. This variant is not currently supported by the library at this time (due to the differences in signal which affects both object instantiation and signaling). A future iteration of this library will likely include support.
+
 ```
 Device     Package Pins  General Purpose I/O Pins
 ---------  ------------  ------------------------
