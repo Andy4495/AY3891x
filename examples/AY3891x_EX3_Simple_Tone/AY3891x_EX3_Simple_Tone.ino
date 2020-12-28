@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------------
-   AY3891x Library Example Sketch 1: Find Chip Address
+   AY3891x Library Example Sketch 3: Simple Tone Generator
    https://github.com/Andy4495/AY3891x
 
    This code will play through the middle-octave notes C4 to C5.
@@ -49,8 +49,10 @@ AY3891x psg(4, 5, 6, 7, 8, 10, 11, 12, 2, A5, 3);
 
 // Assuming a 1 MHz clock on the AY38910 chip, these represent the
 // Tone Generator Control values for the notes C4 (middle C) to C4
+// For a 2 MHz clock, double the divider values
 // Approximate frequencies: 261,  293,  329,  349,  393,  440,  492,  534 Hz
-byte  tone_dividers[]   = { 239,  213,  190,  179,  159,  142,  127,  117};
+byte  tone_dividers[]   = { 239,  213,  190,  179,  159,  142,  127,  117};  // 1 MHz clock
+// byte  tone_dividers[]   = { 478,  426,  379,  358,  319,  284,  253,  235};  // 2 MHz clock
 const char* note_name[] = {"C4", "D4", "E4", "F4", "G4", "A5", "B5", "C5"};
 
 void setup() {
