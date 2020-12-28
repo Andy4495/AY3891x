@@ -1,13 +1,11 @@
 AY3891x Library
 ====================
 
-Arduino library for General Instrument AY-3-8910 / AY-3-8912 / AY-3-8913 Programmable Sound Generator chip.
+Arduino library for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator chip.
 
-All three chips have the same sound generator functionality.
+The AY-3-8913 variant has the same physical silicon as the other chips, but has a slightly different programming interface which uses a Chip Select signal. *The 8913 variant is not currently supported by the library. A future iteration of this library will likely include support.*
 
 The AY-3-8910 and AY-3-8912 have the same programming interface. The 8910 has two 8-bit I/O ports and the 8912 has a single 8-bit I/O port (and correspondingly fewer pins). These general purpose I/O pins are not related to the sound generation functions. This library has only been tested with the 8910 variant of the chip, but should also work with the 8912.
-
-The AY-3-8913 variant does not have a BC2 pin, but includes a Chip Select signal. This impacts the programming interface and also requires a slightly different constructor to account for the different signals. *This variant is not currently supported by the library. A future iteration of this library will likely include support.*
 
 ```
 Device     Package Pins  General Purpose I/O Pins
@@ -16,6 +14,8 @@ AY-3-8910       40            16
 AY-3-8912       28             8
 AY-3-8913       24             0  // Not currently supported
 ```
+
+There are several [variants][3] of the chip from other manufacturers, examples of which are the Yamaha YM2149F and YM3439 and Toshiba T7766A. These variants are probably compatible with this library but have not been tested. 
 
 Usage
 -----
@@ -83,3 +83,4 @@ References
 
 [1]: http://map.grauw.nl/resources/sound/generalinstrument_ay-3-8910.pdf
 [2]: https://www.instructables.com/Arduino-MIDI-Chiptune-Synthesizer/
+[3]: https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910#Variants
