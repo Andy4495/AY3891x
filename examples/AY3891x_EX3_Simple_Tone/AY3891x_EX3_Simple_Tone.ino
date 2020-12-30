@@ -17,6 +17,10 @@
 
 #include "AY3891x.h"
 
+// Be sure to use the correct pin numbers for your setup.
+//          DA7, DA6, DA5, DA4, DA3, DA2, DA1, DA0, BDIR, BC2, BC1
+AY3891x psg( A3,   8,   7,   6,   5,   4,   2,   3,   A2,  A1,  A0);
+
 #define HARDWARE_GENERATED_CLOCK  // Comment this line if not using supported microcontroller
 #ifdef HARDWARE_GENERATED_CLOCK
 // The following code generates a 1 MHz 50% duty cycle output to be used
@@ -45,8 +49,6 @@ static void clockSetup()
 }
 #endif
 
-AY3891x psg(4, 5, 6, 7, 8, 10, 11, 12, 2, A5, 3);
-
 // Assuming a 1 MHz clock on the AY38910 chip, these represent the
 // Tone Generator Control values for the notes C4 (middle C) to C4
 // For a 2 MHz clock, double the divider values
@@ -69,14 +71,18 @@ void setup() {
   psg.begin();
   // psg.setAddress(TheChipsAddress);   // Only need this for special-ordered chips with non-default address.
 
-  psg.write(AY3891x::ChA_Amplitude,0x0F); // Max amplitude
-  psg.write(AY3891x::Enable_Reg, 0x3E);   // Enable Channel A tone generator output
+  // Use less than max amplitude, in case external amp can't handle the higher level (start low and increase after testing)
+  psg.write(AY3891x::ChA_Amplitude, 0x04); // Lower amplitude
+  psg.write(AY3891x::ChB_Amplitude, 0x08); // Mid amplitude
+  psg.write(AY3891x::Enable_Reg, 0x3C);   // Enable Channel A and B tone generator output
 
   for (byte i = 0; i < sizeof(tone_dividers)/sizeof(tone_dividers[0]); i++){
     Serial.print("Playing note: ");
     Serial.println(note_name[i]);
     psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, 0);   // All the dividers are < 255, so no coarse adjustment needed in this example
     psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, tone_dividers[i]);
+    psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, 0);   // All the dividers are < 255, so no coarse adjustment needed in this example
+    psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, tone_dividers[i]);
     delay(1000);
   }
 }

@@ -20,7 +20,9 @@
 
 #include "AY3891x.h"
 
-AY3891x psg(4, 5, 6, 7, 8, 10, 11, 12, 2, A5, 3);
+// Be sure to use the correct pin numbers for your setup.
+//          DA7, DA6, DA5, DA4, DA3, DA2, DA1, DA0, BDIR, BC2, BC1
+AY3891x psg( A3,   8,   7,   6,   5,   4,   2,   3,   A2,  A1,  A0);
 
 void setup() {
   byte value;

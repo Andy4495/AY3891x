@@ -15,7 +15,7 @@ AY-3-8912       28             8
 AY-3-8913       24             0  // Not currently supported
 ```
 
-There are several [variants][3] of the chip from other manufacturers, examples of which are the Yamaha YM2149F and YM3439 and Toshiba T7766A. These variants are probably compatible with this library but have not been tested. 
+There are several [variants][3] of the chip from other manufacturers, examples of which are the Yamaha YM2149F and YM3439 and Toshiba T7766A. These variants are probably compatible with this library but have not been tested.
 
 Usage
 -----
@@ -80,7 +80,9 @@ This sketch demonstrates the use of the I/O ports on the AY-3-8910 or -8912.
 References
 ----------
 + AY-3-891x [datasheet][1]
++ Info from the Synth DIY [wiki][4]
 
 [1]: http://map.grauw.nl/resources/sound/generalinstrument_ay-3-8910.pdf
 [2]: https://www.instructables.com/Arduino-MIDI-Chiptune-Synthesizer/
 [3]: https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910#Variants
+[4]: https://sdiy.info/wiki/General_Instrument_AY-3-8910
