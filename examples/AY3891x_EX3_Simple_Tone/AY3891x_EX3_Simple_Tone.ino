@@ -11,7 +11,7 @@
    to generate the required clock, and comment out
    // #define HARDWARE_GENERATED_CLOCK
 
-   12/21/26 - A.T. - Original
+   12/21/20 - A.T. - Original
 
 */
 

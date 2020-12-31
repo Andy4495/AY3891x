@@ -14,7 +14,7 @@
    and functioning. If no address is found, then there may be a problem
    with the chip itself or the connection to the microcontroller.
 
-   12/21/26 - A.T. - Original
+   12/21/20 - A.T. - Original
 
 */
 

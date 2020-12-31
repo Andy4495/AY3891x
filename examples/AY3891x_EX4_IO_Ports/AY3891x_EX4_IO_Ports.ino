@@ -7,7 +7,7 @@
    ports, the AY-3-8912 has one 8-bit I/O port, and the AY-3-8913
    does not have any I/O ports.
 
-   12/21/26 - A.T. - Original
+   12/21/20 - A.T. - Original
 
 */
 

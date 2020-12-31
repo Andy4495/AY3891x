@@ -8,7 +8,7 @@
    These values do not necessarily program anything useful on the chip;
    it is just a test to see that all the registers work.
 
-   12/21/26 - A.T. - Original
+   12/21/20 - A.T. - Original
 
 */
 
