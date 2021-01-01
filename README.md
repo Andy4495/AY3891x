@@ -77,6 +77,9 @@ Note that an external clock is required for the chip's audio functions to work. 
 **EX4 - I/O Ports**  
 This sketch demonstrates the use of the I/O ports on the AY-3-8910 or -8912.
 
+**EX5 - Serial Commands**  
+This sketch allows you to send commands to the AY-3-891x chip through the serial port. It makes it easy to experiment with the various sound generation capabilities of the chip.
+
 References
 ----------
 + AY-3-891x [datasheet][1]
