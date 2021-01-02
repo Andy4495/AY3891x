@@ -29,7 +29,7 @@ void setup() {
   // By default, the I/O ports are set up as inputs.
   // There are internal pull-ups connected to the input ports, so if the pins
   // are left floating, they should read as zero when set to input.
-  psg.write(AY3891x::Enable_Reg, 0x3F);  // Disable audio, I/O ports to input mode
+  psg.write(AY3891x::Enable_Reg, ~(MIXER_INPUTS_DISABLE));  // Disable audio, I/O ports to input mode
   Serial.println("Input Mode has internal pullups.");
   Serial.print("Input Port A read value: 0x");
   Serial.println(psg.read(AY3891x::IO_Port_A_Reg), HEX);
@@ -41,7 +41,7 @@ void setup() {
   // Measure with a DMM or scope to test
   Serial.println("Setting ports to OUTPUT...");
   delay(1000);
-  psg.write(AY3891x::Enable_Reg, 0xFF); // Ports to output mode, audio disabled
+  psg.write(AY3891x::Enable_Reg, MIXER_ALL_DISABLED); // Ports to output mode, audio disabled
   Serial.println("Writing 0xA5 to A and 0x5A to B.");
   psg.write(AY3891x::IO_Port_A_Reg, 0xA5);
   psg.write(AY3891x::IO_Port_B_Reg, 0x5A);

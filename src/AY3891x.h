@@ -10,6 +10,7 @@
 #define AY3891x_H
 
 #include "Arduino.h"
+#include "AY3891x_register_defs.h"
 
 class AY3891x {
 public:
@@ -36,7 +37,7 @@ public:
          IO_Port_B_Reg              = 15  // 8 bits
       };
 
-  // Constructor for all pins 
+  // Constructor for all pins
   // Use "AY3891::NO_PIN" for pins that are not tied to the microcontroller.
   AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
           byte  BDIR, byte BC2, byte BC1,

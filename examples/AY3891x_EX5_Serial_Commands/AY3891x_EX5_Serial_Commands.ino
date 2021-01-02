@@ -42,6 +42,7 @@
 #include <Arduino.h>
 #include "SerialCommands.h"
 #include "AY3891x.h"
+#include "AY3891x_sounds.h"
 
 char buffer[32];
 SerialCommands serial_commands_(&Serial, buffer, sizeof(buffer), "\n", " ");
@@ -149,17 +150,17 @@ void cmd_enable(SerialCommands* sender)
         case NONE:
           sender->GetSerial()->println(F("Enabling all tone and noise generators."));
           value = psg.read(AY3891x::Enable_Reg);
-          psg.write(AY3891x::Enable_Reg, 0xC0 & value);
+          psg.write(AY3891x::Enable_Reg, MIXER_INPUTS_DISABLE & value);
           break;
         case TONES:
           sender->GetSerial()->println(F("Enabling all tone generators."));
           value = psg.read(AY3891x::Enable_Reg);
-          psg.write(AY3891x::Enable_Reg, 0xF8 & value);
+          psg.write(AY3891x::Enable_Reg, (MIXER_INPUTS_DISABLE | MIXER_NOISES_DISABLE) & value);
           break;
         case NOISES:
           sender->GetSerial()->println(F("Enabling all noise generators."));
           value = psg.read(AY3891x::Enable_Reg);
-          psg.write(AY3891x::Enable_Reg, 0xC7 & value);
+          psg.write(AY3891x::Enable_Reg, (MIXER_INPUTS_DISABLE |MIXER_TONES_DISABLE) & value);
           break;
         default:
           cmd_unrecognized(sender, buffer);
@@ -171,17 +172,17 @@ void cmd_enable(SerialCommands* sender)
         case CHANA:
           sender->GetSerial()->println(F("Enabling Channel A tone generator."));
           value = psg.read(AY3891x::Enable_Reg);
-          psg.write(AY3891x::Enable_Reg, 0xFE & value);
+          psg.write(AY3891x::Enable_Reg, (MIXER_INPUTS_DISABLE | MIXER_NOISES_DISABLE | MIXER_TONE_B_DISABLE | MIXER_TONE_C_DISABLE) & value);
           break;
         case CHANB:
           sender->GetSerial()->println(F("Enabling Channel B tone generator."));
           value = psg.read(AY3891x::Enable_Reg);
-          psg.write(AY3891x::Enable_Reg, 0xFD & value);
+          psg.write(AY3891x::Enable_Reg, (MIXER_INPUTS_DISABLE | MIXER_NOISES_DISABLE | MIXER_TONE_A_DISABLE | MIXER_TONE_C_DISABLE) & value);
           break;
         case CHANC:
           sender->GetSerial()->println(F("Enabling Channel C tone generator."));
           value = psg.read(AY3891x::Enable_Reg);
-          psg.write(AY3891x::Enable_Reg, 0xFB & value);
+          psg.write(AY3891x::Enable_Reg, (MIXER_INPUTS_DISABLE | MIXER_NOISES_DISABLE | MIXER_TONE_A_DISABLE | MIXER_TONE_B_DISABLE) & value);
           break;
         default:
           cmd_unrecognized(sender, buffer);
@@ -194,17 +195,17 @@ void cmd_enable(SerialCommands* sender)
         case CHANA:
           sender->GetSerial()->println(F("Enabling Channel A noise generator."));
           value = psg.read(AY3891x::Enable_Reg);
-          psg.write(AY3891x::Enable_Reg, 0xF7 & value);
+          psg.write(AY3891x::Enable_Reg, (MIXER_INPUTS_DISABLE | MIXER_TONES_DISABLE | MIXER_NOISE_B_DISABLE | MIXER_NOISE_C_DISABLE) & value);
           break;
         case CHANB:
           sender->GetSerial()->println(F("Enabling Channel B noise generator."));
           value = psg.read(AY3891x::Enable_Reg);
-          psg.write(AY3891x::Enable_Reg, 0xEF & value);
+          psg.write(AY3891x::Enable_Reg, (MIXER_INPUTS_DISABLE | MIXER_TONES_DISABLE | MIXER_NOISE_A_DISABLE | MIXER_NOISE_C_DISABLE) & value);
           break;
         case CHANC:
           sender->GetSerial()->println(F("Enabling Channel C noise generator."));
           value = psg.read(AY3891x::Enable_Reg);
-          psg.write(AY3891x::Enable_Reg, 0xDF & value);
+          psg.write(AY3891x::Enable_Reg, (MIXER_INPUTS_DISABLE | MIXER_TONES_DISABLE | MIXER_NOISE_A_DISABLE | MIXER_NOISE_B_DISABLE) & value);
           break;
         default:
           cmd_unrecognized(sender, buffer);
@@ -225,7 +226,7 @@ void cmd_disable(SerialCommands* sender)
   sender->GetSerial()->println(F("Disabling all tones and noises."));
 
   value = psg.read(AY3891x::Enable_Reg);
-  psg.write(AY3891x::Enable_Reg, 0x3F | value);
+  psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE | MIXER_TONES_DISABLE | value);
 }
 
 void cmd_write(SerialCommands* sender)
@@ -298,15 +299,15 @@ void setup()
 
   psg.begin();
   // psg.setAddress(TheChipsAddress);   // Only need this for special-ordered chips with non-default address.
-  /// Set up some tones to make testing easier.
+  // Set up a tone on channel A and B to make testing easier.
+  // By default, the tone generators are enabled when the chip comes out of reset
   psg.write(AY3891x::ChA_Amplitude, 0x04); // Lower amplitude
   psg.write(AY3891x::ChB_Amplitude, 0x08); // Mid amplitude
   Serial.print(F("Configuring note: C4 (middle C)"));
-  psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, 0);   // All the dividers are < 255, so no coarse adjustment needed in this example
-  psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, 239);
-  psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, 0);   // All the dividers are < 255, so no coarse adjustment needed in this example
-  psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, 239);
-  ///
+  psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, Notes[C_4] >> 8);
+  psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, Notes[C_4] & TONE_GENERATOR_FINE);
+  psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, Notes[C_4] >> 8);
+  psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, Notes[C_4] & TONE_GENERATOR_FINE);
 
   Serial.println(F(""));
   Serial.println(F("AY-3-891x Sound Chip Library Example 5: Serial Commands."));

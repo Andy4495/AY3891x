@@ -72,19 +72,19 @@ void setup() {
   // Use less than max amplitude, in case external amp can't handle the higher level (start low and increase after testing)
   psg.write(AY3891x::ChA_Amplitude, 0x04); // Lower amplitude
   psg.write(AY3891x::ChB_Amplitude, 0x08); // Mid amplitude
-  psg.write(AY3891x::Enable_Reg, 0x3C);   // Enable Channel A and B tone generator output
+  psg.write(AY3891x::Enable_Reg, ~(MIXER_TONE_A_DISABLE | MIXER_TONE_B_DISABLE));   // Enable Channel A and B tone generator output
 
   for (byte i = 0; i < sizeof(notes_to_play) / sizeof(notes_to_play[0]); i++) {
     Serial.print("Playing note freq: ");
     Serial.println(1000000UL/16/Notes[notes_to_play[i]]);
     psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, Notes[notes_to_play[i]]>>8);
-    psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, Notes[notes_to_play[i]] & 0xFF);
+    psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, Notes[notes_to_play[i]] & TONE_GENERATOR_FINE);
     psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, Notes[notes_to_play[i]]>>8);
-    psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, Notes[notes_to_play[i]] & 0xFF);
+    psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, Notes[notes_to_play[i]] & TONE_GENERATOR_FINE);
     delay(1000);
   }
 
-  psg.write(AY3891x::Enable_Reg, 0x3F);   // Disable Tone Generators
+  psg.write(AY3891x::Enable_Reg, MIXER_ALL_DISABLED);   // Disable Tone Generators
 }
 
 void loop() {
