@@ -16,6 +16,7 @@
 */
 
 #include "AY3891x.h"
+#include "AY3891x_sounds.h"  // Contains the divisor values for the musical notes
 
 // Be sure to use the correct pin numbers for your setup.
 //          DA7, DA6, DA5, DA4, DA3, DA2, DA1, DA0, BDIR, BC2, BC1
@@ -49,13 +50,10 @@ static void clockSetup()
 }
 #endif
 
-// Assuming a 1 MHz clock on the AY38910 chip, these represent the
-// Tone Generator Control values for the notes C4 (middle C) to C4
-// For a 2 MHz clock, double the divider values
-// Approximate frequencies: 261,  293,  329,  349,  393,  440,  492,  534 Hz
-byte  tone_dividers[]   = { 239,  213,  190,  179,  159,  142,  127,  117};  // 1 MHz clock
-// byte  tone_dividers[]   = { 478,  426,  379,  358,  319,  284,  253,  235};  // 2 MHz clock
-const char* note_name[] = {"C4", "D4", "E4", "F4", "G4", "A5", "B5", "C5"};
+const int notes_to_play[] = {
+  C_4, D_4, E_4, F_4, G_4, A_4, B_4, C_5,
+  C_4, E_4, G_4, C_5, G_4, E_4, C_4
+};
 
 void setup() {
 #ifdef HARDWARE_GENERATED_CLOCK
@@ -76,15 +74,17 @@ void setup() {
   psg.write(AY3891x::ChB_Amplitude, 0x08); // Mid amplitude
   psg.write(AY3891x::Enable_Reg, 0x3C);   // Enable Channel A and B tone generator output
 
-  for (byte i = 0; i < sizeof(tone_dividers)/sizeof(tone_dividers[0]); i++){
-    Serial.print("Playing note: ");
-    Serial.println(note_name[i]);
-    psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, 0);   // All the dividers are < 255, so no coarse adjustment needed in this example
-    psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, tone_dividers[i]);
-    psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, 0);   // All the dividers are < 255, so no coarse adjustment needed in this example
-    psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, tone_dividers[i]);
+  for (byte i = 0; i < sizeof(notes_to_play) / sizeof(notes_to_play[0]); i++) {
+    Serial.print("Playing note freq: ");
+    Serial.println(1000000UL/16/Notes[notes_to_play[i]]);
+    psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, Notes[notes_to_play[i]]>>8);
+    psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, Notes[notes_to_play[i]] & 0xFF);
+    psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, Notes[notes_to_play[i]]>>8);
+    psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, Notes[notes_to_play[i]] & 0xFF);
     delay(1000);
   }
+
+  psg.write(AY3891x::Enable_Reg, 0x3F);   // Disable Tone Generators
 }
 
 void loop() {
