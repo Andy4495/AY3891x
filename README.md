@@ -84,8 +84,10 @@ References
 ----------
 + AY-3-891x [datasheet][1]
 + Info from the Synth DIY [wiki][4]
++ [Summary][5] of the registers (simplified info from datasheet)
 
 [1]: http://map.grauw.nl/resources/sound/generalinstrument_ay-3-8910.pdf
 [2]: https://www.instructables.com/Arduino-MIDI-Chiptune-Synthesizer/
 [3]: https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910#Variants
 [4]: https://sdiy.info/wiki/General_Instrument_AY-3-8910
+[5]: ./Register-Summary.md
