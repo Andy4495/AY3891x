@@ -26,6 +26,8 @@ Usage
 ```
 #include "AY3891x.h"
 ```
+The file `AY3891x_sounds.h` contains definitions for eight octaves of musical notes. It is not strictly necessary to use this header file, but you can include it to make playing notes a little easier. If you aren't using it, then it will save a little flash memory by not including the file. It is used by example programs 3 and 5. 
+
 2. Instantiate the object. There are two forms of the constructor. The first one supports all of the chip's interface pins. The second one allows for a slightly simplified format when using only the minimal pins necessary to interface with the chip.
 ```
 AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,

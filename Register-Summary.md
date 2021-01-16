@@ -13,7 +13,7 @@ With 1 MHz clock, a tone divider of 239 (0xE7) will generate middle C (C_4).
 
 #### Register R6 - 0x6: Noise Generator Control (lower 5 bits)
 Clock is divided by 16, then further divided by the 5-bit value in R6.  
---> I have not gotten this to generate any noise, need to check amplitude and enable settings.
+Note that all values, including zero, produce noise if the noise channel is enabled.
 
 #### Register R7 - 0x7: Mixer Control, I/O Direction
 Audio control is active LOW; I/O LOW is INPUT mode.  
@@ -30,20 +30,20 @@ b0 - Tone Channel A*
 ```
 
 #### Register R10 - R12: Amplitude Control
-Register R10 - 0x8 - Channel A
-Register R11 - 0x9 - Channel B
-Register R12 - 0xA - Channel C
+Register R10 - 0x8 - Channel A  
+Register R11 - 0x9 - Channel B  
+Register R12 - 0xA - Channel C  
 ```
 b7-b5 not used
 b4 - 1 = envelope mode, 0 = use b3-b0 for constant amplitude level
 ```
 
 #### Registers R13 - R14: Envelope Period Control
-Register R13 - 0xB - Course (upper bits)
-Register R14 - 0xC - Fine (lower bits)
-Clock is divided by 256, then divided by 16 bit value in R13-R14.
+Register R13 - 0xB - Course (upper bits)  
+Register R14 - 0xC - Fine (lower bits)  
+Clock is divided by 256, then divided by 16 bit value in R13-R14.  
 
-#### Register R15 - 0x:- Envelope Shape Control
+#### Register R15 - 0xD:- Envelope Shape Control
 ```
 b7 - b4 not used
 b3 - Continue
@@ -65,5 +65,5 @@ b1111 - /|__________ (appears to be same effect as b01xx)
 ```
 
 #### Registers R16 - R17: I/O Port Data
-Register R16 - 0xE - Port A
-Register R17 - 0xF - Port B
+Register R16 - 0xE - Port A  
+Register R17 - 0xF - Port B  
