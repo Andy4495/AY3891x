@@ -23,6 +23,9 @@
      disable
      write register value
      read register
+     middlec
+     gunshot
+     explosion
 
    The integer values "register" and "value" need to be entered in decimal,
    but are echoed back on the terminal in hex.
@@ -275,11 +278,53 @@ void cmd_read(SerialCommands* sender)
   }
 }
 
+void cmd_middlec(SerialCommands* sender)
+{
+  sender->GetSerial()->println("Enable Middle C on channels A and B");
+  psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE | MIXER_TONE_C_DISABLE);    // Disable the noise, enable tones on A and B
+  psg.write(AY3891x::ChA_Amplitude, 0x04); // Lower amplitude
+  psg.write(AY3891x::ChB_Amplitude, 0x08); // Mid amplitude
+  psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, Notes[C_4] >> 8);
+  psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, Notes[C_4] & TONE_GENERATOR_FINE);
+  psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, Notes[C_4] >> 8);
+  psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, Notes[C_4] & TONE_GENERATOR_FINE);
+}
+
+void cmd_gunshot(SerialCommands* sender)
+{
+  sender->GetSerial()->println("Playing gunshot sound on A, B, C");
+  // Register programming values adopted from AY-3-8910 Data Manual, Secion 6.2
+  psg.write(AY3891x::Noise_Period_Reg, 0xF); // Set Noise period to mid-value
+  psg.write(AY3891x::Enable_Reg, MIXER_TONES_DISABLE); // Enable noise only on A,B,C
+  psg.write(AY3891x::ChA_Amplitude, 0x10); // Set full amplitude range under direct control of Envelope Generator
+  psg.write(AY3891x::ChB_Amplitude, 0x10);
+  psg.write(AY3891x::ChC_Amplitude, 0x10);
+  psg.write(AY3891x::Env_Period_Coarse_Reg, 4); // Set envlope period
+  psg.write(AY3891x::Env_Period_Fine_Reg, 0);
+  psg.write(AY3891x::Env_Shape_Cycle, 0);  // Envelope decay, one cycle only
+}
+
+void cmd_explosion(SerialCommands* sender)
+{
+  sender->GetSerial()->println("Playing explosion sound on A, B, C");
+  // Register programming values adopted from AY-3-8910 Data Manual, Secion 6.2
+  psg.write(AY3891x::Noise_Period_Reg, 0x0); // Set Noise period to max value
+  psg.write(AY3891x::Enable_Reg, MIXER_TONES_DISABLE); // Enable noise only on A,B,C
+  psg.write(AY3891x::ChA_Amplitude, 0x10); // Set full amplitude range under direct control of Envelope Generator
+  psg.write(AY3891x::ChB_Amplitude, 0x10);
+  psg.write(AY3891x::ChC_Amplitude, 0x10);
+  psg.write(AY3891x::Env_Period_Coarse_Reg, 0x1c); // Set envlope period
+  psg.write(AY3891x::Env_Period_Fine_Reg, 0);
+  psg.write(AY3891x::Env_Shape_Cycle, 0);  // Envelope decay, one cycle only
+}
 
 SerialCommand cmd_enable_("enable", cmd_enable);
 SerialCommand cmd_disable_("disable", cmd_disable);
 SerialCommand cmd_write_("write", cmd_write);
 SerialCommand cmd_read_("read", cmd_read);
+SerialCommand cmd_middlec_("middlec", cmd_middlec);
+SerialCommand cmd_gunshot_("gunshot", cmd_gunshot);
+SerialCommand cmd_explosion_("explosion", cmd_explosion);
 
 void setup()
 {
@@ -296,6 +341,9 @@ void setup()
   serial_commands_.AddCommand(&cmd_disable_);
   serial_commands_.AddCommand(&cmd_write_);
   serial_commands_.AddCommand(&cmd_read_);
+  serial_commands_.AddCommand(&cmd_middlec_);
+  serial_commands_.AddCommand(&cmd_gunshot_);
+  serial_commands_.AddCommand(&cmd_explosion_);
 
   psg.begin();
   // psg.setAddress(TheChipsAddress);   // Only need this for special-ordered chips with non-default address.
@@ -320,6 +368,9 @@ void setup()
   Serial.println(F("  disable"));
   Serial.println(F("  write register value"));
   Serial.println(F("  read register"));
+  Serial.println(F("  middlec"));
+  Serial.println(F("  gunshot"));
+  Serial.println(F("  explosion"));
   Serial.println(F("Enter command: "));
 }
 
