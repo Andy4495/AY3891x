@@ -1,7 +1,7 @@
 AY3891x Library
 ====================
 
-Arduino library for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator chip.
+Arduino library for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator chip, including clones like the YM2149.
 
 The AY-3-8913 variant has the same physical silicon as the other chips, but has a slightly different programming interface which uses a Chip Select signal. *The 8913 variant is not currently supported by the library. A future iteration of this library will likely include support.*
 
@@ -26,7 +26,7 @@ Usage
 ```
 #include "AY3891x.h"
 ```
-The file `AY3891x_sounds.h` contains definitions for eight octaves of musical notes. It is not strictly necessary to use this header file, but you can include it to make playing notes a little easier. If you aren't using it, then it will save a little flash memory by not including the file. It is used by example programs 3 and 5. 
+The file `AY3891x_sounds.h` contains definitions for eight octaves of musical notes. It is not strictly necessary to use this header file, but you can include it to make playing notes a little easier. If you aren't using it, then it will save a little flash memory by not including the file. It is used by example programs 3 and 5.
 
 2. Instantiate the object. There are two forms of the constructor. The first one supports all of the chip's interface pins. The second one allows for a slightly simplified format when using only the minimal pins necessary to interface with the chip.
 ```
