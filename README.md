@@ -1,11 +1,13 @@
 AY3891x Library
 ====================
 
-Arduino library for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator chip, including clones like the YM2149.
+Arduino library and chiptunes player for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator (PSG) chip, including clones like the YM2149.
 
 The AY-3-8913 variant has the same physical silicon as the other chips, but has a slightly different programming interface which uses a Chip Select signal. *The 8913 variant is not currently supported by the library. A future iteration of this library will likely include support.*
 
 The AY-3-8910 and AY-3-8912 have the same programming interface. The 8910 has two 8-bit I/O ports and the 8912 has a single 8-bit I/O port (and correspondingly fewer pins). These general purpose I/O pins are not related to the sound generation functions. This library has only been tested with the 8910 variant of the chip, but should also work with the 8912.
+
+Note that other libraries and PSG-related projects typically discuss the need to use fast pin switching in order to meet the strict signal timing requirements when using the PSG, meaning that they don't use the platform-agnostic `digitalWrite()` function.  This ends up creating non-portable, processor specific code. While the PSG has tight timing requirements, it is possible to still use `digitalWrite()` by cycling through an extra state when reading and writing the chip registers. This library uses the generic `digitalWrite()` function instead of direct port manipulation, and should therefore work across most, if not all, processors supported by the Arduino and Energia IDEs, so long as enough I/O pins are available for the interface to the PSG. 
 
 ```
 Device     Package Pins  General Purpose I/O Pins
@@ -82,14 +84,32 @@ This sketch demonstrates the use of the I/O ports on the AY-3-8910 or -8912.
 **EX5 - Serial Commands**  
 This sketch allows you to send commands to the AY-3-891x chip through the serial port. It makes it easy to experiment with the various sound generation capabilities of the chip.
 
+**EX6 - Chiptunes Flash**
+This examples plays a converted YM file which is compiled into the program as a byte array of the data values to write to the 14 audio
+registers on the sound chip.
+
+Since the audio data is compiled into the program, there is a relatively small limit on the duration of the chiptune to be played. The sketch itself takes 1632 bytes, leaving about 29,000 bytes on an Atmega328. Fourteen bytes of data are written 50 times a second, meaning that the largest data array can store about 41 seconds of music.
+
+See this [README][6] for details on finding and converting YM files for use with this sketch.
+
+**EX7 - Chiptunes SD**
+This example sketch plays YM files which are stored on an SD card. The sketch sequentially goes through each file in the root directory.
+
+See this [README][6] for details on finding and converting YM files for use with this sketch.
+
+
 References
 ----------
 + AY-3-891x [datasheet][1]
 + Info from the Synth DIY [wiki][4]
 + [Summary][5] of the registers (simplified info from datasheet)
++ YMduino [player][7] and [code][8] which provided inspiration for chiptunes example sketches 6 and 7.
 
 [1]: http://map.grauw.nl/resources/sound/generalinstrument_ay-3-8910.pdf
 [2]: https://www.instructables.com/Arduino-MIDI-Chiptune-Synthesizer/
 [3]: https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910#Variants
 [4]: https://sdiy.info/wiki/General_Instrument_AY-3-8910
 [5]: ./Register-Summary.md
+[6]: ./extras/tools/README.md
+[7]: https://homes.cs.washington.edu/~eqy/ymduino.html
+[8]: https://github.com/eqy/ymduino
