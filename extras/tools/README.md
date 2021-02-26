@@ -42,7 +42,7 @@ $ python decoder.py filename.bin force_interleaved
 4. **Convert to Header File**  
   In order to work with [Example 6][11], the interleaved file needs to be converted to a C array and placed in a header file. Use the `bin2c14.py` [python script][13] included in the `extras/tools` directory of this library to convert to a header file.
 ```
-$ python bin2c14.py outputfile 28000 >chiptunes.h  // Explain, test, and use consistent naming
+$ python bin2c14.py outputfile 28000 >chiptunes.h
 ```
   Since [Example 6][11] compiles the audio data into the program itself, there is a limited amount of memory available. For an Arduino UNO or Mini, 28000 bytes is about the most you can fit with a basic player program. This allows for about 40 seconds of music. Hence, the above example has a parameter of `28000`, which tells to script to stop filling the array once it has reached a size of 28000.
 
