@@ -16,6 +16,7 @@
    // #define HARDWARE_GENERATED_CLOCK
 
    02/08/21 - A.T. - Original
+   02/25/21 - A.T. - Check for button on pin 18 (aka SDA or A4) to advance to next file
 
 */
 
@@ -32,6 +33,11 @@ unsigned long prev_micros = 0;
 #define INTERVAL 20000
 
 #define CS   10
+
+#define NEXT_BUTTON 18
+// Time in milliseconds to wait for keybounce to settle.
+// 20 ms usually works well for most buttons, adjust if necessary
+#define KEYBOUNCE_DELAY 20
 
 
 #define HARDWARE_GENERATED_CLOCK  // Comment this line if not using supported microcontroller
@@ -64,8 +70,10 @@ static void clockSetup()
 
 File root;
 File current_song;
-enum State {PLAYING, GETNEXT, NOMOREFILES};
+enum State {PLAYING, GETNEXT, NOMOREFILES, BUTTONRELEASE};
 State state;
+
+unsigned long last_button = 0;
 
 void setup()
 {
@@ -77,6 +85,7 @@ void setup()
 #endif
 
   pinMode(CS, OUTPUT);
+  pinMode(NEXT_BUTTON, INPUT_PULLUP);
   Serial.begin(9600);
 
   psg.begin();
@@ -84,6 +93,9 @@ void setup()
 
   Serial.println(F(""));
   Serial.println(F("AY-3-891x Sound Chip Library Example 7: Sound Chip YM data player."));
+  Serial.print(F("Press button on pin "));
+  Serial.print(NEXT_BUTTON);
+  Serial.println(F(" to advance to next song on SD card."));
   Serial.println(F(""));
 
   if (!SD.begin(CS))
@@ -125,6 +137,27 @@ void loop()
           state = GETNEXT;
         }
       }
+      if (digitalRead(NEXT_BUTTON) == LOW)
+      {
+        if (millis() - last_button > KEYBOUNCE_DELAY)
+        {
+          last_button = millis();
+          state = BUTTONRELEASE;
+          // Turn off audio if button is pressed
+          psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE | MIXER_TONES_DISABLE | psg.read(AY3891x::Enable_Reg));
+        }
+      }
+      break;
+
+    case BUTTONRELEASE:
+      if (digitalRead(NEXT_BUTTON) == HIGH)
+      {
+        if (millis() - last_button > KEYBOUNCE_DELAY)
+        {
+          last_button = millis();
+          state = GETNEXT;
+        }
+      }
       break;
 
     case GETNEXT:
@@ -134,10 +167,9 @@ void loop()
       {
         // No more files on the SD card
         state = NOMOREFILES;
-        /* // Or, start from the beginning
-          root.rewindDirectory();
-          // state will stil be GETNEXT for next iteration through loop()
-        */
+        // When no more song files, turn off audio
+        psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE | MIXER_TONES_DISABLE | psg.read(AY3891x::Enable_Reg));
+        Serial.println("No more files found. Press button to start again.");
       }
       else
       {
@@ -163,10 +195,15 @@ void loop()
       break;
 
     case NOMOREFILES:
-      // When no more song files, turn off audio and sit quietly
-      psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE | MIXER_TONES_DISABLE | psg.read(AY3891x::Enable_Reg));
-      Serial.println("No more files found. Program stopped.");
-      while (1); // Empty statement; loop forever
+      if (digitalRead(NEXT_BUTTON) == LOW)
+      {
+        if (millis() - last_button > KEYBOUNCE_DELAY)
+        {
+          last_button = millis();
+          state = BUTTONRELEASE;
+          root.rewindDirectory();
+        }
+      }
       break;
 
     default:

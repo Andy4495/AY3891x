@@ -95,7 +95,7 @@ Since the audio data is compiled into the program, there is a relatively small l
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
 **EX7 - Chiptunes SD**
-This example sketch plays YM files which are stored on an SD card. The sketch sequentially goes through each file in the root directory.
+This example sketch plays YM files which are stored on an SD card. The sketch sequentially goes through each file in the root directory. Press the button defined as `NEXT_BUTTON` to advance to the next song on the card. 
 
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
