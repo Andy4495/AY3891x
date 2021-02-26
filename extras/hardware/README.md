@@ -7,11 +7,11 @@ I created a chiptunes player circuit on a breadboard containing the following:
 - SparkFun [Mono Amplifier][3]
 - SparkFun [Level Shifter][4]
 - Generic [Micro SD breakout board][5] (does not include level shifters)
-- Texas Instruments [TLV-2217][6] 3.3V LDO Regulator
+- Texas Instruments [TLV-2217][6] 3.3V LDO Regulator (used by the SD breakout and level shifter)
 
 The board has several headers to supply power, connect an FTDI adapter, and to configure the audio mixing to the amplifier.
 
-Here are [top][7] and [bottom][8] photos of the board.
+Here are [top][7] and [bottom][8] photos of the board. The 3.3V regulator is mounted below the Arduino (to save space) and is not visible in the photos.
 
 The signal connections are as follows:
 
