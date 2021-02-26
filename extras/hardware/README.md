@@ -55,5 +55,5 @@ A4/SDA                  A4      Pushbutton switch
 [4]: https://www.sparkfun.com/products/12009
 [5]: https://www.amazon.com/Module-Storage-Reader-Arduino-Memory/dp/B07YHGCC8C/ref=sr_1_8?dchild=1&keywords=micro-sd+breakout+board&qid=1614302508&sr=8-8
 [6]: https://www.ti.com/lit/ds/symlink/tlv2217.pdf
-[7]: ./ChiptunesPlayer-Top.pdf
-[8]: ./ChiptunesPlayer-Bottom.pdf
+[7]: ./ChiptunesPlayer-Top.jpg
+[8]: ./ChiptunesPlayer-Bottom.jpg
