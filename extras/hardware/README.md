@@ -23,29 +23,29 @@ GND              1       GND    TLV-2217 GND, Level Shifter, Amplifier, SD Break
 Audio Ch A       4              Headers
 Audio Ch B       3              Headers
 Audio Ch C      38              Headers
-BDIR            27       A2
-BC2             28       A1
-BC1             29       A0
+BDIR            27        A2
+BC2             28        A1
+BC1             29        A0
 RESET           23              N.C. (pulled up internal to AY-3-8910)
-CLOCK           22       D9
+CLOCK           22        D9
 A9              24              N.C. (pulled down internal to AY-3-8910)
 A8              25              N.C. (pulled up internal to AY-3-8910)
-DA7             30       A3
-DA6             31        8
-DA5             32        7
-DA4             33        6
-DA3             34        5
-DA2             35        4
-DA1             36        2
-DA0             37        3
-SPI MOSI                D11     Level Shifter, then SD Breakout MOSI
-SPI MISO                D12     Level Shifter, then SD Breakout MISO
-SD CS                   D10     Level Shifter, then SD Breakout CS
-SPI CLK                 D13     Level Shifter, then SD Breakout CLK
+DA7             30        A3
+DA6             31        D8
+DA5             32        D7
+DA4             33        D6
+DA3             34        D5
+DA2             35        D4
+DA1             36        D2
+DA0             37        D3
+SPI MOSI                 D11    Level Shifter, then SD Breakout MOSI
+SPI MISO                 D12    Level Shifter, then SD Breakout MISO
+SD CS                    D10    Level Shifter, then SD Breakout CS
+SPI CLK                  D13    Level Shifter, then SD Breakout CLK
 3.3V                            TLV-2217 Vout, Level Shifter LV, SD Breakout 3.3V
-RXI                     D0      FTDI Header TX
-TXO                     D1      FTDI Header RX
-A4/SDA                  A4      Pushbutton switch
+RXI                       D0    FTDI Header TX
+TXO                       D1    FTDI Header RX
+BUTTON              A4/D18/SDA  Pushbutton switch to GND
 ```
 
 
