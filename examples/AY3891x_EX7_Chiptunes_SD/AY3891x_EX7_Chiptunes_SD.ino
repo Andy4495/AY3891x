@@ -134,6 +134,7 @@ void loop()
         }
         else
         {
+          current_song.close();
           state = GETNEXT;
         }
       }
@@ -155,6 +156,7 @@ void loop()
         if (millis() - last_button > KEYBOUNCE_DELAY)
         {
           last_button = millis();
+          current_song.close();
           state = GETNEXT;
         }
       }
@@ -178,6 +180,7 @@ void loop()
           // Windows creates a folder that is difficult to remove, so just ignore it.
           Serial.print("Skipping file: ");
           Serial.println(current_song.name());
+          current_song.close();
           // state will stil be GETNEXT for next iteration through loop()
         }
         else
