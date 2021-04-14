@@ -107,6 +107,11 @@ References
 + [Summary][5] of the registers (simplified info from datasheet)
 + YMduino [player][7] and [code][8] which provided inspiration for chiptunes example sketches 6 and 7.
 
+License
+-------
+The software and other files in this repository are released under what is commonly called the [MIT License][100]. See the file [`LICENSE.txt`][101] in this repository.
+
+
 [1]: http://map.grauw.nl/resources/sound/generalinstrument_ay-3-8910.pdf
 [2]: https://www.instructables.com/Arduino-MIDI-Chiptune-Synthesizer/
 [3]: https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910#Variants
@@ -116,3 +121,5 @@ References
 [7]: https://homes.cs.washington.edu/~eqy/ymduino.html
 [8]: https://github.com/eqy/ymduino
 [9]: ./extras/hardware/README.md
+[100]: https://choosealicense.com/licenses/mit/
+[101]: ./LICENSE.txt
