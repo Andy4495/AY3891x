@@ -2,6 +2,7 @@ Chiptunes Player Hardware
 =========================
 
 I created a chiptunes player circuit on a breadboard containing the following:
+
 - General Instrument [AY-3-8910][1] Programmable Sound Generator
 - Arduino 5V [Pro Mini][2]
 - SparkFun [Mono Amplifier][3]
@@ -15,7 +16,7 @@ Here are [top][7] and [bottom][8] photos of the board. The 3.3V regulator is mou
 
 The signal connections are as follows:
 
-```
+```text
 Signal      AY-3-8910  Arduino  Other/Notes
 ------      ---------  -------  -----------
 Vcc (+5V)       40       VCC    TLV-2217 Vin, Amplifier PWR+, headers, Level Shifter HV
@@ -48,7 +49,6 @@ TXO                       D1    FTDI Header RX
 BUTTON              A4/D18/SDA  Pushbutton switch to GND
 ```
 
-
 [1]: ../../README.md
 [2]: https://www.sparkfun.com/products/11113
 [3]: https://www.sparkfun.com/products/11044
@@ -57,3 +57,4 @@ BUTTON              A4/D18/SDA  Pushbutton switch to GND
 [6]: https://www.ti.com/lit/ds/symlink/tlv2217.pdf
 [7]: ./ChiptunesPlayer-Top.jpg
 [8]: ./ChiptunesPlayer-Bottom.jpg
+[200]: https://github.com/Andy4495/AY3891x
