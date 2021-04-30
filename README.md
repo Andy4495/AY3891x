@@ -9,7 +9,7 @@ The AY-3-8910 and AY-3-8912 have the same programming interface. The 8910 has tw
 
 Note that other libraries and PSG-related projects typically discuss the need to use fast pin switching in order to meet the strict signal timing requirements when using the PSG, meaning that they don't use the platform-agnostic `digitalWrite()` function.  This ends up creating non-portable, processor specific code. While the PSG has tight timing requirements, it is possible to still use `digitalWrite()` by cycling through an extra state when reading and writing the chip registers. This library uses the generic `digitalWrite()` function instead of direct port manipulation, and should therefore work across most, if not all, processors supported by the Arduino and Energia IDEs, so long as enough I/O pins are available for the interface to the PSG.
 
-```
+```text
 Device     Package Pins  General Purpose I/O Pins
 ---------  ------------  ------------------------
 AY-3-8910       40            16
@@ -27,43 +27,60 @@ Usage
 *Refer to the sketches in the `examples` folder.*
 
 1. Include the library header file:  
-```
-#include "AY3891x.h"
-```
-The file `AY3891x_sounds.h` contains definitions for eight octaves of musical notes. It is not strictly necessary to use this header file, but you can include it to make playing notes a little easier. If you aren't using it, then it will save a little flash memory by not including the file. It is used by example programs 3 and 5.
 
-2. Instantiate the object. There are two forms of the constructor. The first one supports all of the chip's interface pins. The second one allows for a slightly simplified format when using only the minimal pins necessary to interface with the chip.
-```
-AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
-        byte  BDIR, byte BC2, byte BC1,
-        byte  A9,   byte A8,
-        byte  reset, byte clock);
-```
-```
-AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
-        byte  BDIR, byte BC2, byte BC1);
-```
-```
-// Example constructor using the simpler form
-AY3891x psg(4, 5, 6, 7, 8, 10, 11, 12, 2, A5, 3);
-```
-Use the enumeration `AY3891::NO_PIN` if any of the pins required by the constructor are not connected.
+    ```C++
+    #include "AY3891x.h"
+    ```
 
-3. Initialize the object.
-```
-psg.begin();
-```
+2. (optional) Include definitions for eight octaves of musical notes:
 
-4. Use the read() and write() methods to program the chip:
-```
-psg.write(AY3891x::Enable_Reg, 0x3F);  
-psg.read(AY3891x::IO_Port_A_Reg;
-```
+    ```C++
+    #include "AY3891x_sounds.h" 
+    ```
 
-5. See the library source code and example sketches for other available methods and usage.
+    It is not strictly necessary to use this header file, but you can include it to make playing notes a little easier. If you aren't using it, then it will save a little flash memory by not including the file. It is used by example programs 3 and 5.
+
+3. Instantiate the object. There are two forms of the constructor. The first one supports all of the chip's interface pins. The second one allows for a slightly simplified format when using only the minimal pins necessary to interface with the chip.
+
+    ```C++
+    AY3891x(byte DA7, byte DA6, byte DA5, byte DA4, 
+            byte DA3, byte DA2, byte DA1, byte DA0,
+            byte BDIR, byte BC2, byte BC1,
+            byte A9, byte A8,
+            byte reset, byte clock);
+    ```
+
+    ```C++
+    AY3891x(byte DA7, byte DA6, byte DA5, byte DA4, 
+            byte DA3, byte DA2, byte DA1, byte DA0,
+            byte BDIR, byte BC2, byte BC1);
+    ```
+
+    ```C++
+    // Example constructor using the simpler form
+    AY3891x psg(4, 5, 6, 7, 8, 10, 11, 12, 2, A5, 3);
+    ```
+
+    Use the enumeration `AY3891::NO_PIN` if any of the pins required by the constructor are not connected.
+
+4. Initialize the object.
+
+    ```C++
+    psg.begin();
+    ```
+
+5. Use the read() and write() methods to program the chip:
+
+    ```C++
+    psg.write(AY3891x::Enable_Reg, 0x3F);  
+    psg.read(AY3891x::IO_Port_A_Reg;
+    ```
+
+6. See the library source code and example sketches for other available methods and usage.
 
 Example Sketches
 ----------------
+
 **EX1 - Find Address**  
 The AY-3-8910 chip typically has a binary address of `01 0000 xxxx`,
 where `xxxx` represents the specific register you are addressing.
@@ -86,7 +103,7 @@ This sketch demonstrates the use of the I/O ports on the AY-3-8910 or -8912.
 **EX5 - Serial Commands**  
 This sketch allows you to send commands to the AY-3-891x chip through the serial port. It makes it easy to experiment with the various sound generation capabilities of the chip.
 
-**EX6 - Chiptunes Flash**
+**EX6 - Chiptunes Flash**  
 This examples plays a converted YM file which is compiled into the program as a byte array of the data values to write to the 14 audio
 registers on the sound chip.
 
@@ -94,14 +111,14 @@ Since the audio data is compiled into the program, there is a relatively small l
 
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
-**EX7 - Chiptunes SD**
-This example sketch plays YM files which are stored on an SD card. The sketch sequentially goes through each file in the root directory. Press the button defined as `NEXT_BUTTON` to advance to the next song on the card. 
+**EX7 - Chiptunes SD**  
+This example sketch plays YM files which are stored on an SD card. The sketch sequentially goes through each file in the root directory. Press the button defined as `NEXT_BUTTON` to advance to the next song on the card.
 
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
-
 References
 ----------
+
 + AY-3-891x [datasheet][1]
 + Info from the Synth DIY [wiki][4]
 + [Summary][5] of the registers (simplified info from datasheet)
@@ -109,8 +126,8 @@ References
 
 License
 -------
-The software and other files in this repository are released under what is commonly called the [MIT License][100]. See the file [`LICENSE.txt`][101] in this repository.
 
+The software and other files in this repository are released under what is commonly called the [MIT License][100]. See the file [`LICENSE.txt`][101] in this repository.
 
 [1]: http://map.grauw.nl/resources/sound/generalinstrument_ay-3-8910.pdf
 [2]: https://www.instructables.com/Arduino-MIDI-Chiptune-Synthesizer/
@@ -123,3 +140,4 @@ The software and other files in this repository are released under what is commo
 [9]: ./extras/hardware/README.md
 [100]: https://choosealicense.com/licenses/mit/
 [101]: ./LICENSE.txt
+[200]: https://github.com/Andy4495/AY3891x
