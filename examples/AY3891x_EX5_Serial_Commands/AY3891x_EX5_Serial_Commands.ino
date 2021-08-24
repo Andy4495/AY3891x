@@ -16,7 +16,7 @@
    to generate the required clock, and comment out
    // #define HARDWARE_GENERATED_CLOCK
 
-   Curently supported commands:
+   Curently supported commands (set end-of-line to Newline in Serial Monitor)
      enable all [tones|noises]
      enable tone a|b|c
      enable noise a|b|c
@@ -35,10 +35,10 @@
    the command line entered.
 
    This code automatically configures a middle C tone on channels A and B
-   for ease of testing. The tone generator still needs to be enabled in
-   order to hear the tone.
+   for ease of testing. 
 
    12/31/20 - A.T. - Original
+   08/24/21 - A.T. - Support PROGMEM for Notes[] array
 
 */
 
@@ -284,10 +284,10 @@ void cmd_middlec(SerialCommands* sender)
   psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE | MIXER_TONE_C_DISABLE);    // Disable the noise, enable tones on A and B
   psg.write(AY3891x::ChA_Amplitude, 0x04); // Lower amplitude
   psg.write(AY3891x::ChB_Amplitude, 0x08); // Mid amplitude
-  psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, Notes[C_4] >> 8);
-  psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, Notes[C_4] & TONE_GENERATOR_FINE);
-  psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, Notes[C_4] >> 8);
-  psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, Notes[C_4] & TONE_GENERATOR_FINE);
+  psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, pgm_read_word(&Notes[C_4]) >> 8);
+  psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, pgm_read_word(&Notes[C_4]) & TONE_GENERATOR_FINE);
+  psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, pgm_read_word(&Notes[C_4]) >> 8);
+  psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, pgm_read_word(&Notes[C_4]) & TONE_GENERATOR_FINE);
 }
 
 void cmd_gunshot(SerialCommands* sender)
@@ -353,10 +353,10 @@ void setup()
   psg.write(AY3891x::ChA_Amplitude, 0x04); // Lower amplitude
   psg.write(AY3891x::ChB_Amplitude, 0x08); // Mid amplitude
   Serial.print(F("Configuring note: C4 (middle C)"));
-  psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, Notes[C_4] >> 8);
-  psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, Notes[C_4] & TONE_GENERATOR_FINE);
-  psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, Notes[C_4] >> 8);
-  psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, Notes[C_4] & TONE_GENERATOR_FINE);
+  psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, pgm_read_word(&Notes[C_4]) >> 8);
+  psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, pgm_read_word(&Notes[C_4]) & TONE_GENERATOR_FINE);
+  psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, pgm_read_word(&Notes[C_4]) >> 8);
+  psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, pgm_read_word(&Notes[C_4]) & TONE_GENERATOR_FINE);
 
   Serial.println(F(""));
   Serial.println(F("AY-3-891x Sound Chip Library Example 5: Serial Commands."));

@@ -12,6 +12,7 @@
    // #define HARDWARE_GENERATED_CLOCK
 
    12/21/20 - A.T. - Original
+   08/24/21 - A.T. - Support PROGMEM for Notes[] array
 
 */
 
@@ -76,11 +77,11 @@ void setup() {
 
   for (byte i = 0; i < sizeof(notes_to_play) / sizeof(notes_to_play[0]); i++) {
     Serial.print("Playing note freq: ");
-    Serial.println(1000000UL/16/Notes[notes_to_play[i]]);
-    psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, Notes[notes_to_play[i]]>>8);
-    psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, Notes[notes_to_play[i]] & TONE_GENERATOR_FINE);
-    psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, Notes[notes_to_play[i]]>>8);
-    psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, Notes[notes_to_play[i]] & TONE_GENERATOR_FINE);
+    Serial.println(1000000UL/16/pgm_read_word(&Notes[notes_to_play[i]]));
+    psg.write(AY3891x::ChA_Tone_Period_Coarse_Reg, pgm_read_word(&Notes[notes_to_play[i]]) >> 8);
+    psg.write(AY3891x::ChA_Tone_Period_Fine_Reg, pgm_read_word(&Notes[notes_to_play[i]]) & TONE_GENERATOR_FINE);
+    psg.write(AY3891x::ChB_Tone_Period_Coarse_Reg, pgm_read_word(&Notes[notes_to_play[i]]) >> 8);
+    psg.write(AY3891x::ChB_Tone_Period_Fine_Reg, pgm_read_word(&Notes[notes_to_play[i]]) & TONE_GENERATOR_FINE);
     delay(1000);
   }
 
