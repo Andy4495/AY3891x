@@ -40,6 +40,8 @@ Usage
 
     It is not strictly necessary to use this header file, but you can include it to make playing notes a little easier. If you aren't using it, then it will save a little flash memory by not including the file. It is used by example programs 3 and 5.
 
+    Note that as of version 1.1.0 of the library, the `Notes[]` array in AY3891x_sounds.h is defined as `PROGMEM`. This will require minor changes to any sketches which include this file and use the `Notes[]` array. See example programs 3 and 5.
+
 3. Instantiate the object. There are two forms of the constructor. The first one supports all of the chip's interface pins. The second one allows for a slightly simplified format when using only the minimal pins necessary to interface with the chip.
 
     ```C++
