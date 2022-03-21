@@ -60,14 +60,12 @@ This library does not include any YM files because I could not find any clear li
 References
 ----------
 
-+ [ymduino][1] project
 + [ymduino code][2], which served as inspiration for my chiptunes example code. Also contains the decoder.py script mentioned above.
 + Yamaha YM2149 [datasheet][3] -- clone of AY-3-8910
 + [YM Playback][4] -- Some sample YM files, along with ymextract converter/extractor program
 + [Genesis8][5] -- source of YM file downloads
 + [YM Jukebox][6] -- large source of YM file downloads
 
-[1]: https://homes.cs.washington.edu/~eqy/ymduino.html
 [2]: https://github.com/eqy/ymduino
 [3]: http://www.ym2149.com/ym2149.pdf
 [4]: http://www.waveguide.se/?article=ym-playback-on-the-ymz284
@@ -81,3 +79,5 @@ References
 [12]: ../../examples/AY3891x_EX7_Chiptunes_SD
 [13]: ./bin2c14.py
 [200]: https://github.com/Andy4495/AY3891x
+
+[//]: # (Dead link from older version of README: ymduino project page https://homes.cs.washington.edu/~eqy/ymduino.html)
