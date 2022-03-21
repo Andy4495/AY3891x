@@ -1,0 +1,21 @@
+# From: https://github.com/marketplace/actions/compile-arduino-sketches
+# Uses: https://github.com/arduino/compile-sketches
+name: Arduino Compile Sketches
+
+on: 
+  push:
+
+jobs:
+  compile-sketches: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: arduino/compile-sketches@v1
+        with:
+          sketch-paths: |
+            - .
+          verbose: true
+          enable-warnings-report: true
+          libraries: |
+            - source-path: ./
+

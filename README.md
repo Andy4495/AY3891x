@@ -1,5 +1,7 @@
-AY3891x Library
-====================
+# AY3891x Library
+
+[![Arduino Compile Sketches](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-compile-sketches.yml/badge.svg)](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-compile-sketches.yml)
+[![Check Markdown Links](https://github.com/Andy4495/AY3891x/actions/workflows/CheckMarkdownLinks.yml/badge.svg)](https://github.com/Andy4495/AY3891x/actions/workflows/CheckMarkdownLinks.yml)
 
 Arduino library and chiptunes player for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator (PSG) chip, including clones like the YM2149.
 
@@ -21,8 +23,7 @@ There are several [variants][3] of the chip from other manufacturers, examples o
 
 I created an Arduino-AY38910 chiptunes player board, see the [README][9] in the `extras/hardware` folder.
 
-Usage
------
+## Usage
 
 *Refer to the sketches in the `examples` folder.*
 
@@ -80,8 +81,7 @@ Usage
 
 6. See the library source code and example sketches for other available methods and usage.
 
-Example Sketches
-----------------
+## Example Sketches
 
 **EX1 - Find Address**  
 The AY-3-8910 chip typically has a binary address of `01 0000 xxxx`,
@@ -118,16 +118,14 @@ This example sketch plays YM files which are stored on an SD card. The sketch se
 
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
-References
-----------
+## References
 
 + AY-3-891x [datasheet][1]
 + Info from the Synth DIY [wiki][4]
 + [Summary][5] of the registers (simplified info from datasheet)
 + YMduino [player][7] and [code][8] which provided inspiration for chiptunes example sketches 6 and 7.
 
-License
--------
+## License
 
 The software and other files in this repository are released under what is commonly called the [MIT License][100]. See the file [`LICENSE.txt`][101] in this repository.
 
