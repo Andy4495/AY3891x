@@ -18,4 +18,6 @@ jobs:
           enable-warnings-report: true
           libraries: |
             - source-path: ./
+            - name: SD
+            - source-url: https://github.com/ppedro74/Arduino-SerialCommands.git
 

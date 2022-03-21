@@ -123,7 +123,7 @@ See this [README][6] for details on finding and converting YM files for use with
 + AY-3-891x [datasheet][1]
 + Info from the Synth DIY [wiki][4]
 + [Summary][5] of the registers (simplified info from datasheet)
-+ YMduino [player][7] and [code][8] which provided inspiration for chiptunes example sketches 6 and 7.
++ YMduino [code][8] which provided inspiration for chiptunes example sketches 6 and 7.
 
 ## License
 
@@ -135,9 +135,10 @@ The software and other files in this repository are released under what is commo
 [4]: https://sdiy.info/wiki/General_Instrument_AY-3-8910
 [5]: ./Register-Summary.md
 [6]: ./extras/tools/README.md
-[7]: https://homes.cs.washington.edu/~eqy/ymduino.html
 [8]: https://github.com/eqy/ymduino
 [9]: ./extras/hardware/README.md
 [100]: https://choosealicense.com/licenses/mit/
 [101]: ./LICENSE.txt
 [200]: https://github.com/Andy4495/AY3891x
+
+[//]: # (Dead link from older version of README: https://homes.cs.washington.edu/~eqy/ymduino.html)
