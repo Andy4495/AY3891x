@@ -141,4 +141,4 @@ The software and other files in this repository are released under what is commo
 [101]: ./LICENSE.txt
 [200]: https://github.com/Andy4495/AY3891x
 
-[//]: # (Dead link from older version of README: https://homes.cs.washington.edu/~eqy/ymduino.html)
+[//]: # (Dead link from older version of README: homes.cs.washington.edu/~eqy/ymduino.html)
