@@ -1,5 +1,4 @@
-Chiptunes Player Hardware
-=========================
+# Chiptunes Player Hardware
 
 I created a chiptunes player circuit on a breadboard containing the following:
 
@@ -11,8 +10,6 @@ I created a chiptunes player circuit on a breadboard containing the following:
 - Texas Instruments [TLV-2217][6] 3.3V LDO Regulator (used by the SD breakout and level shifter)
 
 The board has several headers to supply power, connect an FTDI adapter, and to configure the audio mixing to the amplifier.
-
-Here are [top][7] and [bottom][8] photos of the board. The 3.3V regulator is mounted below the Arduino (to save space) and is not visible in the photos.
 
 The signal connections are as follows:
 
@@ -48,6 +45,18 @@ RXI                       D0    FTDI Header TX
 TXO                       D1    FTDI Header RX
 BUTTON              A4/D18/SDA  Pushbutton switch to GND
 ```
+
+## Board Photos
+
+The 3.3V regulator is mounted below the Arduino (to save space) and is not visible in the photos.
+
+### Top
+
+![Top of Board][7]
+
+### Bottom
+
+![Bottom of Board][8]
 
 [1]: ../../README.md
 [2]: https://www.sparkfun.com/products/11113

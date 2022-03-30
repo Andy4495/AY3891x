@@ -1,5 +1,4 @@
-Finding and Converting YM Files for the Chiptunes Examples
-==========================================================
+# Finding and Converting YM Files for the Chiptunes Examples
 
 The AY3891x [library][7] includes two example sketches ([EX6][11], [EX7][12]) that play complex [chiptunes][8] on the AY-3-8910  [Programmable Sound Generator][10] (PSG) and its clones and variants.
 
@@ -57,8 +56,7 @@ This library does not include any YM files because I could not find any clear li
 
   Since [Example 6][11] compiles the audio data into the program itself, there is a limited amount of memory available. For an Arduino UNO or Mini, 28000 bytes is about the most you can fit with a basic player program. This allows for about 40 seconds of music. Hence, the above example has a parameter of `28000`, which tells to script to stop filling the array once it has reached a size of 28000.
 
-References
-----------
+## References
 
 + [ymduino code][2], which served as inspiration for my chiptunes example code. Also contains the decoder.py script mentioned above.
 + Yamaha YM2149 [datasheet][3] -- clone of AY-3-8910
