@@ -5,19 +5,11 @@
 
 Arduino library and chiptunes player for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator (PSG) chip, including clones like the YM2149.
 
-The AY-3-8913 variant has the same physical silicon as the other chips, but has a slightly different programming interface which uses a Chip Select signal. *The 8913 variant is not currently supported by the library. A future iteration of this library may include support.*
+The AY-3-8913 variant has a different programming interface which uses a Chip Select signal. *The 8913 variant is not currently supported by the library. A future iteration of this library may include support.*
 
 The AY-3-8910 and AY-3-8912 have the same programming interface. The 8910 has two 8-bit I/O ports and the 8912 has a single 8-bit I/O port (and correspondingly fewer pins). These general purpose I/O pins are not related to the sound generation functions. This library has only been tested with the 8910 variant of the chip, but should also work with the 8912.
 
 Note that other libraries and PSG-related projects typically discuss the need to use fast pin switching in order to meet the strict signal timing requirements when using the PSG, meaning that they don't use the platform-agnostic `digitalWrite()` function.  This ends up creating non-portable, processor specific code. While the PSG has tight timing requirements, it is possible to still use `digitalWrite()` by cycling through an extra state when reading and writing the chip registers. This library uses the generic `digitalWrite()` function instead of direct port manipulation, and should therefore work across most, if not all, processors supported by the Arduino and Energia IDEs, so long as enough I/O pins are available for the interface to the PSG.
-
-```text
-Device     Package Pins  General Purpose I/O Pins
----------  ------------  ------------------------
-AY-3-8910       40            16
-AY-3-8912       28             8
-AY-3-8913       24             0  // Not currently supported
-```
 
 There are several [variants][3] of the chip from other manufacturers, examples of which are the Yamaha YM2149F and YM3439 and Toshiba T7766A. These variants are probably compatible with this library but have not been tested.
 
@@ -103,7 +95,7 @@ Note that an external clock is required for the chip's audio functions to work. 
 This sketch demonstrates the use of the I/O ports on the AY-3-8910 or -8912.
 
 **EX5 - Serial Commands**  
-This sketch allows you to send commands to the AY-3-891x chip through the serial port. It makes it easy to experiment with the various sound generation capabilities of the chip.
+This sketch allows you to send commands to the AY-3-891x chip through the serial port. It makes it easy to experiment with the various sound generation capabilities of the chip. This example depends on the [SerialCommands][10] library.
 
 **EX6 - Chiptunes Flash**  
 This examples plays a converted YM file which is compiled into the program as a byte array of the data values to write to the 14 audio
@@ -137,6 +129,7 @@ The software and other files in this repository are released under what is commo
 [6]: ./extras/tools/README.md
 [8]: https://github.com/eqy/ymduino
 [9]: ./extras/hardware/README.md
+[10]: https://github.com/ppedro74/Arduino-SerialCommands
 [100]: https://choosealicense.com/licenses/mit/
 [101]: ./LICENSE.txt
 [200]: https://github.com/Andy4495/AY3891x
