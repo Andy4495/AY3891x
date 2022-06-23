@@ -5,9 +5,9 @@
 
 Arduino library and chiptunes player for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator (PSG) chip, including clones like the YM2149.
 
-The AY-3-8913 variant has a different programming interface which uses a Chip Select signal. *The 8913 variant is not currently supported by the library. A future iteration of this library may include support.*
-
 The AY-3-8910 and AY-3-8912 have the same programming interface. The 8910 has two 8-bit I/O ports and the 8912 has a single 8-bit I/O port (and correspondingly fewer pins). These general purpose I/O pins are not related to the sound generation functions. This library has only been tested with the 8910 variant of the chip, but should also work with the 8912.
+
+The AY-3-8913 variant has a different programming interface which uses a Chip Select signal. *The 8913 variant is not currently supported by the library. A future iteration of this library may include support.*
 
 Note that other libraries and PSG-related projects typically discuss the need to use fast pin switching in order to meet the strict signal timing requirements when using the PSG, meaning that they don't use the platform-agnostic `digitalWrite()` function.  This ends up creating non-portable, processor specific code. While the PSG has tight timing requirements, it is possible to still use `digitalWrite()` by cycling through an extra state when reading and writing the chip registers. This library uses the generic `digitalWrite()` function instead of direct port manipulation, and should therefore work across most, if not all, processors supported by the Arduino and Energia IDEs, so long as enough I/O pins are available for the interface to the PSG.
 
