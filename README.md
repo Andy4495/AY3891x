@@ -75,6 +75,8 @@ I created an Arduino-AY38910 chiptunes player board, see the [README][9] in the 
 
 ## Example Sketches
 
+*NOTE: While the library itself does not use any platform-specific code, the examples that generate tones (EX3, EX5, EX6, EX7) have platform-specific code to generate the `CLOCK` signal required by the sound generator chip. If you are using an ATmega329 or ATmega32u4 chip, then the examples should run as-is. For other chips, consult the respective datasheet or connect an externally-generated clock signal to the sound generator chip and update the example code accordingly.*
+
 **EX1 - Find Address**  
 The AY-3-8910 chip typically has a binary address of `01 0000 xxxx`,
 where `xxxx` represents the specific register you are addressing.

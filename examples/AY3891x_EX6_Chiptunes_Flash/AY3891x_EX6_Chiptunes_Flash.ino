@@ -18,6 +18,7 @@
    // #define HARDWARE_GENERATED_CLOCK
 
    02/08/21 - A.T. - Original
+   07/25/22 - Andy4495 - Implement non-blocking delay
 
 */
 
@@ -46,20 +47,12 @@ static const byte clkOUT = 9;
 const byte DIVISOR = 3; // Set for approximate 2 MHz clock
 static void clockSetup()
 {
-  // Timer 1 setup for Mega32U4 devices
-  //
-  // Use CTC mode: WGM13..0 = 0100
-  // Toggle OC1A on Compare Match: COM1A1..0 = 01
-  // Use ClkIO with no prescaling: CS12..0 = 001
-  // Interrupts off: TIMSK0 = 0
-  // OCR0A = interval value
-
   TCCR1A = (1 << COM1A0);
   TCCR1B = (1 << WGM12) | (1 << CS10);
   TCCR1C = 0;
   TIMSK1 = 0;
   OCR1AH = 0;
-  OCR1AL = DIVISOR; // NB write high byte first
+  OCR1AL = DIVISOR;
 }
 #endif
 
@@ -79,18 +72,21 @@ void setup()
 void loop()
 {
   byte i;
-  prev_micros = micros();
 
-  for (i= 0; i < 14; i++) {
-    psg.write(i, pgm_read_byte(&psg_data[index++]));
+  if (micros() - prev_micros > INTERVAL)
+  {
+    prev_micros = micros();
+
+    for (i= 0; i < 14; i++) {
+      psg.write(i, pgm_read_byte(&psg_data[index++]));
+    }
+
+    if (index >= sizeof(psg_data)) {
+      psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE | MIXER_TONES_DISABLE | psg.read(AY3891x::Enable_Reg));
+      while (1);
+      // Or... you can re-start the song:
+      //  index = 0;
+    }
   }
 
-  if (index >= sizeof(psg_data)) {
-    psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE | MIXER_TONES_DISABLE | psg.read(AY3891x::Enable_Reg));
-    while (1);
-    // Or... you can re-start to song:
-    //  index = 0;
-  }
-
-  while (micros() - prev_micros < INTERVAL) ; // Empty statement, loop until it is time for next update
 }
