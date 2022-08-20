@@ -2,6 +2,7 @@
 
 [![Arduino Compile Sketches](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-compile-sketches.yml/badge.svg)](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-compile-sketches.yml)
 [![Check Markdown Links](https://github.com/Andy4495/AY3891x/actions/workflows/CheckMarkdownLinks.yml/badge.svg)](https://github.com/Andy4495/AY3891x/actions/workflows/CheckMarkdownLinks.yml)
+[![Arduino Lint](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-lint.yml/badge.svg)](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-lint.yml)
 
 Arduino library and chiptunes player for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator (PSG) chip, including clones like the YM2149.
 
