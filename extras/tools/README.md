@@ -76,6 +76,6 @@ This library does not include any YM files because I could not find any clear li
 [11]: ../../examples/AY3891x_EX6_Chiptunes_Flash
 [12]: ../../examples/AY3891x_EX7_Chiptunes_SD
 [13]: ./bin2c14.py
-[200]: https://github.com/Andy4495/AY3891x
+[//]: # ([200]: https://github.com/Andy4495/AY3891x)
 
 [//]: # (Dead link from older version of README: ymduino project page https://homes.cs.washington.edu/~eqy/ymduino.html)

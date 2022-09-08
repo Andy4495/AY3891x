@@ -66,4 +66,4 @@ The 3.3V regulator is mounted below the Arduino (to save space) and is not visib
 [6]: https://www.ti.com/lit/ds/symlink/tlv2217.pdf
 [7]: ./ChiptunesPlayer-Top.jpg
 [8]: ./ChiptunesPlayer-Bottom.jpg
-[200]: https://github.com/Andy4495/AY3891x
+[//]: # ([200]: https://github.com/Andy4495/AY3891x)

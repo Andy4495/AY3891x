@@ -135,6 +135,6 @@ The software and other files in this repository are released under what is commo
 [10]: https://github.com/ppedro74/Arduino-SerialCommands
 [100]: https://choosealicense.com/licenses/mit/
 [101]: ./LICENSE.txt
-[200]: https://github.com/Andy4495/AY3891x
+[//]: # ([200]: https://github.com/Andy4495/AY3891x)
 
 [//]: # (Dead link from older version of README: ymduino project page https://homes.cs.washington.edu/~eqy/ymduino.html)
