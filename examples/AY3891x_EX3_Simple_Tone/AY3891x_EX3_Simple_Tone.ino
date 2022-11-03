@@ -23,6 +23,7 @@
 //          DA7, DA6, DA5, DA4, DA3, DA2, DA1, DA0, BDIR, BC2, BC1
 AY3891x psg( A3,   8,   7,   6,   5,   4,   2,   3,   A2,  A1,  A0);
 
+#ifdef ARDUINO_ARCH_AVR
 #define HARDWARE_GENERATED_CLOCK  // Comment this line if not using supported microcontroller
 #ifdef HARDWARE_GENERATED_CLOCK
 // The following code generates a 1 MHz 50% duty cycle output to be used
@@ -41,6 +42,7 @@ static void clockSetup()
   OCR1AH = 0;
   OCR1AL = DIVISOR;
 }
+#endif
 #endif
 
 const int notes_to_play[] = {

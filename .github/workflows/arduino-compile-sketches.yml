@@ -4,14 +4,36 @@ name: Arduino Compile Sketches
 
 on: 
   push:
-
+  workflow_dispatch:
+    inputs:
+      message:
+        description: Message to display in job summary
+        required: false
+        type: string
 jobs:
   compile-sketches: 
+    strategy:
+      matrix:
+        include:
+          - arch: avr32u4
+            fqbn: 'arduino:avr:micro'
+            platform-name: 'arduino:avr'
+            platform-sourceurl: 'https://downloads.arduino.cc/packages/package_index.json'
+          - arch: avr328
+            fqbn: 'arduino:avr:uno'
+            platform-name: 'arduino:avr'
+            platform-sourceurl: 'https://downloads.arduino.cc/packages/package_index.json'
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
       - uses: arduino/compile-sketches@v1
         with:
+          fqbn: ${{ matrix.fqbn }}
+          platforms: |
+            - name: ${{ matrix.platform-name }}
+              version: latest
+              source-url: ${{ matrix.platform-sourceurl }}
           sketch-paths: |
             - .
           verbose: true
@@ -20,4 +42,7 @@ jobs:
             - source-path: ./
             - name: SD
             - source-url: https://github.com/ppedro74/Arduino-SerialCommands.git
-
+      - name: Print the job summary
+        if: ${{ inputs.message }}
+        run: |
+          echo ${{ inputs.message }} >$GITHUB_STEP_SUMMARY

@@ -39,7 +39,7 @@ unsigned long prev_micros = 0;
 // 20 ms usually works well for most buttons, adjust if necessary
 #define KEYBOUNCE_DELAY 20
 
-
+#ifdef ARDUINO_ARCH_AVR
 #define HARDWARE_GENERATED_CLOCK  // Comment this line if not using supported microcontroller
 #ifdef HARDWARE_GENERATED_CLOCK
 // The following code generates an approximate 2 MHz 50% duty cycle output to be used
@@ -58,6 +58,7 @@ static void clockSetup()
   OCR1AH = 0;
   OCR1AL = DIVISOR;
 }
+#endif
 #endif
 
 File root;

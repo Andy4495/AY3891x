@@ -35,7 +35,7 @@ unsigned long prev_micros;
 // Write the data at a rate of 50 Hz <-> every 20000 us
 #define INTERVAL 20000
 
-
+#ifdef ARDUINO_ARCH_AVR
 #define HARDWARE_GENERATED_CLOCK  // Comment this line if not using supported microcontroller
 #ifdef HARDWARE_GENERATED_CLOCK
 // The following code generates an approximately 2 MHz 50% duty cycle output to be used
@@ -54,6 +54,7 @@ static void clockSetup()
   OCR1AH = 0;
   OCR1AL = DIVISOR;
 }
+#endif
 #endif
 
 void setup()
