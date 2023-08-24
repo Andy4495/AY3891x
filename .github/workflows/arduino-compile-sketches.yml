@@ -27,6 +27,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: setup-python (when running locally for nektos/act compatibility)
+        if: ${{ env.ACT }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: '>=3.11'
+      - name: Install Poetry (when running locally for nektos/act compatibility)
+        if: ${{ env.ACT }}
+        uses: snok/install-poetry@v1
+      - name: Install pipx (when running locally for nektos/act compatibility)
+        if: ${{ env.ACT }}
+        run: pip install pipx
       - uses: arduino/compile-sketches@v1
         with:
           fqbn: ${{ matrix.fqbn }}
