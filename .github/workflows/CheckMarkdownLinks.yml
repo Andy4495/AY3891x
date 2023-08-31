@@ -8,14 +8,16 @@ on:
     # Modify the cron time to a somewhat random day/time to avoid having all your repos running at the same time
     # Run 4th day of every month at 4:41 AM (See https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07)
     - cron: "37 4 4 * *"
-
+  workflow_dispatch:
+    inputs:
+      message:
+        description: Message to display in job summary
+        required: false
+        type: string
 jobs:
   markdown-link-check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: gaurav-nelson/github-action-markdown-link-check@v1
-      with:
-        base-branch: main
-        use-verbose-mode: yes
+    name: call-markdown-link-check-workflow
+    uses: Andy4495/.github/.github/workflows/CheckMarkdownLinks.yml@main         
+    with:
+      message: ${{ inputs.message }}
             

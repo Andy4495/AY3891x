@@ -5,14 +5,18 @@ name: Arduino Lint
 on:
   push:
   workflow_dispatch:
+    inputs:
+      message:
+        description: Message to display in job summary
+        required: false
+        type: string
 
 jobs:
   arduino-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: arduino/arduino-lint-action@v1
-        with:
-          library-manager: update
-          compliance: strict
-          verbose: true
+    name: call-arduino-lint-workflow
+    uses: Andy4495/.github/.github/workflows/arduino-lint.yml@main
+    with:
+      message: ${{ inputs.message }}
+    secrets: inherit
+
+
