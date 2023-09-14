@@ -15,8 +15,9 @@
 #include "AY3891x.h"
 
 // Be sure to use the correct pin numbers for your setup.
+// Note that on ATmega328: 17=A3, 16=A2, 15=A1, 14=A0
 //          DA7, DA6, DA5, DA4, DA3, DA2, DA1, DA0, BDIR, BC2, BC1
-AY3891x psg( A3,   8,   7,   6,   5,   4,   2,   3,   A2,  A1,  A0);
+AY3891x psg( 17,   8,   7,   6,   5,   4,   2,   3,   16,  15,  14);
 
 void setup() {
   byte value;

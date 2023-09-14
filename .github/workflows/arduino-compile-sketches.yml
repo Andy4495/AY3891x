@@ -24,6 +24,18 @@ jobs:
             fqbn: 'arduino:avr:uno'
             platform-name: 'arduino:avr'
             platform-sourceurl: 'https://downloads.arduino.cc/packages/package_index.json'
+          - arch: stm32
+            fqbn: 'STMicroelectronics:stm32:GenF1:pnum=BLUEPILL_F103C8'
+            platform-name: 'STMicroelectronics:stm32'
+            platform-sourceurl: 'https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json'
+          - arch: esp8266
+            fqbn: 'esp8266:esp8266:thing'
+            platform-name: 'esp8266:esp8266'
+            platform-sourceurl: 'http://arduino.esp8266.com/stable/package_esp8266com_index.json'
+          - arch: esp32
+            fqbn: 'esp32:esp32:esp32'
+            platform-name: 'esp32:esp32'
+            platform-sourceurl: 'https://espressif.github.io/arduino-esp32/package_esp32_index.json'
 
     name: call-compile-sketches-workflow
     uses: Andy4495/.github/.github/workflows/arduino-compile-sketches.yml@main
