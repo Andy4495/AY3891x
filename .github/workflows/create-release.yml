@@ -1,0 +1,22 @@
+# Uses action: https://github.com/ncipollo/release-action
+
+name: Create Release
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag name
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    permissions:
+      contents: write
+    name: call-create-release-workflow
+    uses: Andy4495/.github/.github/workflows/create-release.yml@main
+    with:
+      tag: ${{ inputs.tag }}
+      draft: true
+    secrets: inherit  
