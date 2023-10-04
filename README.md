@@ -113,12 +113,20 @@ This example sketch plays YM files which are stored on an SD card. The sketch se
 
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
+## YouTube Videos
+
+My library was featured in two YouTube videos by [Gadget Reboot][11]:
+
+- [AY-3-8910 Sound Generator with Arduino][13]
+- [AY-3-8910 Sound Generator with Arduino Nano - How it Works][14]
+
 ## References
 
-+ AY-3-891x [datasheet][1]
-+ Info from the Synth DIY [wiki][4]
-+ [Summary][5] of the registers (simplified info from datasheet)
-+ YMduino [code][8] which provided inspiration for chiptunes example sketches 6 and 7.
+- AY-3-891x [datasheet][1]
+- Info from the Synth DIY [wiki][4]
+- [Summary][5] of the registers (simplified info from datasheet)
+- YMduino [code][8] which provided inspiration for chiptunes example sketches 6 and 7.
+- Accociated GitHub [repo][15] for YouTube videos mentioned above
 
 ## License
 
@@ -133,6 +141,10 @@ The software and other files in this repository are released under what is commo
 [8]: https://github.com/eqy/ymduino
 [9]: ./extras/hardware/README.md
 [10]: https://github.com/ppedro74/Arduino-SerialCommands
+[11]: https://www.youtube.com/@GadgetReboot/about
+[13]: https://www.youtube.com/watch?v=b8uAda926so
+[14]: https://www.youtube.com/watch?v=x9Ac49FLJ0c
+[15]: https://github.com/GadgetReboot/AY-3-8910
 [100]: https://choosealicense.com/licenses/mit/
 [101]: ./LICENSE.txt
 [//]: # ([200]: https://github.com/Andy4495/AY3891x)
