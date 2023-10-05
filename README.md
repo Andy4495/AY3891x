@@ -10,7 +10,7 @@ The AY-3-8910 and AY-3-8912 have the same programming interface. The 8910 has tw
 
 The AY-3-8913 variant has a different programming interface which uses a Chip Select signal. *The 8913 variant is not currently supported by the library. A future iteration of this library may include support.*
 
-Note that other libraries and PSG-related projects typically discuss the need to use fast pin switching in order to meet the strict signal timing requirements when using the PSG, meaning that they don't use the platform-agnostic `digitalWrite()` function.  This ends up creating non-portable, processor specific code. While the PSG has tight timing requirements, it is possible to still use `digitalWrite()` by cycling through an extra state when reading and writing the chip registers. This library uses the generic `digitalWrite()` function instead of direct port manipulation, and should therefore work across most, if not all, processors supported by the Arduino and Energia IDEs, so long as enough I/O pins are available for the interface to the PSG.
+Note that other libraries and PSG-related projects typically discuss the need to use fast pin switching in order to meet the strict signal timing requirements when using the PSG, meaning that they don't use the slower, platform-agnostic `digitalWrite()` function.  This ends up creating non-portable, processor specific code. While the PSG has tight timing requirements, it is possible to still use `digitalWrite()` by cycling through an extra state when reading and writing the chip registers. This library uses the generic `digitalWrite()` function instead of direct port manipulation, and should therefore work across most, if not all, processors supported by the Arduino and Energia IDEs, so long as enough I/O pins are available for the interface to the PSG.
 
 There are several [variants][3] of the chip from other manufacturers, examples of which are the Yamaha YM2149F and YM3439 and Toshiba T7766A. These variants are probably compatible with this library but have not been tested.
 
@@ -57,7 +57,7 @@ I created an Arduino-AY38910 chiptunes player board, see the [README][9] in the 
     AY3891x psg(4, 5, 6, 7, 8, 10, 11, 12, 2, A5, 3);
     ```
 
-    Use the enumeration `AY3891::NO_PIN` if any of the pins required by the constructor are not connected.
+    Use the enumeration `AY3891x::NO_PIN` if any of the pins required by the constructor are not connected.
 
 4. Initialize the object.
 
@@ -125,8 +125,8 @@ My library was featured in two YouTube videos by [Gadget Reboot][11]:
 - AY-3-891x [datasheet][1]
 - Info from the Synth DIY [wiki][4]
 - [Summary][5] of the registers (simplified info from datasheet)
-- YMduino [code][8] which provided inspiration for chiptunes example sketches 6 and 7.
-- Accociated GitHub [repo][15] for YouTube videos mentioned above
+- YMduino [code][8] which provided inspiration for chiptunes example sketches 6 and 7
+- Associated GitHub [repo][15] for YouTube videos mentioned above
 
 ## License
 
