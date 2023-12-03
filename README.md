@@ -12,9 +12,9 @@ The AY-3-8913 variant has a different programming interface which uses a Chip Se
 
 Note that other libraries and PSG-related projects typically discuss the need to use fast pin switching in order to meet the strict signal timing requirements when using the PSG, meaning that they don't use the slower, platform-agnostic `digitalWrite()` function.  This ends up creating non-portable, processor specific code. While the PSG has tight timing requirements, it is possible to still use `digitalWrite()` by cycling through an extra state when reading and writing the chip registers. This library uses the generic `digitalWrite()` function instead of direct port manipulation, and should therefore work across most, if not all, processors supported by the Arduino and Energia IDEs, so long as enough I/O pins are available for the interface to the PSG.
 
-There are several [variants][3] of the chip from other manufacturers, examples of which are the Yamaha YM2149F and YM3439 and Toshiba T7766A. These variants are probably compatible with this library but have not been tested.
+There are several [variants][3] of the chip from other manufacturers, including the Yamaha YM2149F and YM3439 and Toshiba T7766A. The YM2149F has been tested with this library. The other variants are probably compatible but have not been tested.
 
-I created an Arduino-AY38910 chiptunes player board, see the [README][9] in the `extras/hardware` folder.
+I created an Arduino-AY38910 chiptunes player board; see the [README][9] in the `extras/hardware` folder.
 
 ## Usage
 
@@ -123,10 +123,12 @@ My library was featured in two YouTube videos by [Gadget Reboot][11]:
 ## References
 
 - AY-3-891x [datasheet][1]
+- Chiptunes player board [hardware design][9]
+- Details on [finding and converting][6] YM files for use with the example sketches
 - Info from the Synth DIY [wiki][4]
 - [Summary][5] of the registers (simplified info from datasheet)
 - YMduino [code][8] which provided inspiration for chiptunes example sketches 6 and 7
-- Associated GitHub [repo][15] for YouTube videos mentioned above
+- Associated [GitHub repo][15] for the YouTube videos mentioned [above](#youtube-videos)
 
 ## License
 
