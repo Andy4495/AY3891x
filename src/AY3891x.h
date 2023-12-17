@@ -39,7 +39,10 @@ public:
 
   // Constructor for all pins
   // Use "AY3891::NO_PIN" for pins that are not tied to the microcontroller.
-  AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
+  // All three of the bus control signals (BDIR, BC1, BC2) need to be connected 
+  // to the processor. 
+  // Do not use AY3891x::NO_PIN in the constructor for these signals.
+AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
           byte  BDIR, byte BC2, byte BC1,
           byte  A9,   byte A8,
           byte  reset, byte clock);
@@ -51,7 +54,10 @@ public:
   // - A9 tied LOW or left unconnected
   // - RESET tied high or to an external reset circuit
   // - CLOCK connected to an independent clock source
-  AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
+  // All three of the bus control signals (BDIR, BC1, BC2) need to be connected 
+  // to the processor. 
+  // Do not use AY3891x::NO_PIN in the constructor for these signals.
+AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
           byte  BDIR, byte BC2, byte BC1);
 
   void begin();

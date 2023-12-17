@@ -10,9 +10,11 @@ The AY-3-8910 and AY-3-8912 have the same programming interface. The 8910 has tw
 
 The AY-3-8913 variant has a different programming interface which uses a Chip Select signal. *The 8913 variant is not currently supported by the library. A future iteration of this library may include support.*
 
-Note that other libraries and PSG-related projects typically discuss the need to use fast pin switching in order to meet the strict signal timing requirements when using the PSG, meaning that they don't use the slower, platform-agnostic `digitalWrite()` function.  This ends up creating non-portable, processor specific code. While the PSG has tight timing requirements, it is possible to still use `digitalWrite()` by cycling through an extra state when reading and writing the chip registers. This library uses the generic `digitalWrite()` function instead of direct port manipulation, and should therefore work across most, if not all, processors supported by the Arduino and Energia IDEs, so long as enough I/O pins are available for the interface to the PSG.
+Other libraries and PSG-related projects typically discuss the need to use fast pin switching in order to meet the strict signal timing requirements when using the PSG, meaning that they don't use the slower, platform-agnostic `digitalWrite()` function.  This ends up creating non-portable, processor specific code. While the PSG has tight timing requirements, it is possible to use `digitalWrite()` by using all three bus control signals (BDIR, BC1, BC2) and cycling through an extra state when reading and writing the chip registers.
 
-There are several [variants][3] of the chip from other manufacturers, including the Yamaha YM2149F and YM3439 and Toshiba T7766A. The YM2149F has been tested with this library. The other variants are probably compatible but have not been tested.
+This library uses the generic `digitalWrite()` function instead of direct port manipulation, and should therefore work across most, if not all, processors supported by Arduino, so long as enough I/O pins are available for the interface to the PSG.
+
+There are several [clones][3] of the chip from other manufacturers, examples of which are the Yamaha YM2149F and YM3439 and Toshiba T7766A. The YM2149 has been tested with this library. The other clones are probably compatible but have not been tested.
 
 I created an Arduino-AY38910 chiptunes player board; see the [README][9] in the `extras/hardware` folder.
 
@@ -58,6 +60,9 @@ I created an Arduino-AY38910 chiptunes player board; see the [README][9] in the 
     ```
 
     Use the enumeration `AY3891x::NO_PIN` if any of the pins required by the constructor are not connected.
+
+> [!IMPORTANT]
+> All three of the bus control signals (BDIR, BC1, BC2) need to be connected to the processor. Do not use `AY3891x::NO_PIN` in the constructor for these signals.
 
 4. Initialize the object.
 
