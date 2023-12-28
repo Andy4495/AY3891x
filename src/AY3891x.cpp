@@ -162,8 +162,10 @@ void AY3891x::write(byte regAddr, byte data) {
   daPinsOutput(data);
   // The Write Data Pulse Width tDW has a max time of 10 us per the datasheet
   // tDW = time that WRITE_DATA mode is enabled before going back to INACTIVE
-  setMode(WRITE_DATA);
-  setMode(INACTIVE_010);
+  if (_BDIR_pin != NO_PIN) {
+      digitalWrite(_BDIR_pin, HIGH);
+      digitalWrite(_BDIR_pin, LOW);
+  }
 //  setMode(INACTIVE_000);   // This is not needed since latchAddressMode() changes to 000
   daPinsInput();
 }
