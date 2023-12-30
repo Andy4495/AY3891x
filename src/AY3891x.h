@@ -3,6 +3,7 @@
    https://github.com/Andy4495/AY3891x
 
    12/21/20 - A.T. - Original
+   29-Dec-2023 - Andy4495 - Release 2.0.0
 
 */
 
@@ -39,9 +40,11 @@ public:
 
   // Constructor for all pins
   // Use "AY3891::NO_PIN" for pins that are not tied to the microcontroller.
+  // ****** IMPORTANT! *****
   // All three of the bus control signals (BDIR, BC1, BC2) need to be connected 
   // to the processor. 
   // Do not use AY3891x::NO_PIN in the constructor for these signals.
+  // ****** IMPORTANT! *****
 AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
           byte  BDIR, byte BC2, byte BC1,
           byte  A9,   byte A8,
@@ -54,9 +57,11 @@ AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, 
   // - A9 tied LOW or left unconnected
   // - RESET tied high or to an external reset circuit
   // - CLOCK connected to an independent clock source
+  // ****** IMPORTANT! *****
   // All three of the bus control signals (BDIR, BC1, BC2) need to be connected 
   // to the processor. 
   // Do not use AY3891x::NO_PIN in the constructor for these signals.
+  // ****** IMPORTANT! *****
 AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, byte DA0,
           byte  BDIR, byte BC2, byte BC1);
 
@@ -80,7 +85,14 @@ private:
   void daPinsInput();
   void daPinsOutput(byte data);
   void latchAddressMode(byte regAddr);
-  void setMode(byte mode);
+  inline void mode000to001();
+  inline void mode001to000();
+  inline void mode000to010();
+  inline void mode010to000();
+  inline void mode010to110();
+  inline void mode110to010();
+  inline void mode010to011();
+  inline void mode011to010();
 };
 
 #endif
