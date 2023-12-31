@@ -115,16 +115,16 @@ This example sketch plays YM files which are stored on an SD card. The sketch se
 
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
+## Interrupts
+
+The library does not use any interrupts, but briefly disables interrupts during the write pulse to the chip. This is to ensure that the write signal time (`tDW`) is within the 10 us maximum spec. On a 16 MHz ATmega 328, interrupts are disabled for about 4.5 us during each register write.
+
 ## YouTube Videos
 
 My library was featured in two YouTube videos by [Gadget Reboot][11]:
 
 - [AY-3-8910 Sound Generator with Arduino][13]
 - [AY-3-8910 Sound Generator with Arduino Nano - How it Works][14]
-
-## Interrupts
-
-The library does not use any interrupts, but briefly disables interrupts during the write pulse to the chip. This is to ensure that the write signal time (`tDW`) is within the 10 us maximum spec. On a 16 MHz ATmega 328, interrupts are disabled for about 4.5 us during each register write.
 
 ## References
 
