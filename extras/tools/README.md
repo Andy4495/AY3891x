@@ -71,7 +71,7 @@ This library does not include any YM files because I could not find any clear li
 [6]: https://github.com/nguillaumin/ym-jukebox/tree/master/data
 [7]: https://github.com/Andy4495/AY3891x
 [8]: https://en.wikipedia.org/wiki/Chiptune
-[9]: http://www.vgmpf.com/Wiki/index.php?title=YM
+[9]: http://leonard.oxg.free.fr/ymformat.html
 [10]: https://en.wikipedia.org/wiki/Programmable_sound_generator
 [11]: ../../examples/AY3891x_EX6_Chiptunes_Flash
 [12]: ../../examples/AY3891x_EX7_Chiptunes_SD
