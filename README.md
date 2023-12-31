@@ -38,7 +38,9 @@ I created an Arduino-AY38910 chiptunes player board; see the [README][9] in the 
 
     Note that as of version 1.1.0 of the library, the `Notes[]` array in AY3891x_sounds.h is defined as `PROGMEM`. This will require minor changes to any sketches which include this file and use the `Notes[]` array. See example programs 3 and 5.
 
-3. Instantiate the object. There are two forms of the constructor. The first one supports all of the chip's interface pins. The second one allows for a slightly simplified format when using only the minimal pins necessary to interface with the chip.
+3. Instantiate the object. There are two forms of the constructor.
+
+    This first form supports all of the chip's interface pins. Use the enumeration `AY3891x::NO_PIN` for any of the optional signals `A9`, `A8`, `RESET` or `CLOCK` required by the constructor that are not connected.
 
     ```C++
     AY3891x(byte DA7, byte DA6, byte DA5, byte DA4, 
@@ -48,21 +50,16 @@ I created an Arduino-AY38910 chiptunes player board; see the [README][9] in the 
             byte reset, byte clock);
     ```
 
+    The second form allows for a slightly simplified format when using only the minimal pins necessary to interface with the chip.
+
     ```C++
     AY3891x(byte DA7, byte DA6, byte DA5, byte DA4, 
             byte DA3, byte DA2, byte DA1, byte DA0,
             byte BDIR, byte BC2, byte BC1);
     ```
 
-    ```C++
-    // Example constructor using the simpler form
-    AY3891x psg(4, 5, 6, 7, 8, 10, 11, 12, 2, A5, 3);
-    ```
-
-    Use the enumeration `AY3891x::NO_PIN` if any of the pins required by the constructor are not connected.
-
 > [!IMPORTANT]
-> All three of the bus control signals (BDIR, BC1, BC2) need to be connected to the processor. Do not use `AY3891x::NO_PIN` in the constructor for these signals.
+> All three of the bus control signals (BDIR, BC1, BC2) need to be connected to the processor. Do not use `AY3891x::NO_PIN` in either constructor for these signals.
 
 4. Initialize the object.
 
@@ -74,7 +71,7 @@ I created an Arduino-AY38910 chiptunes player board; see the [README][9] in the 
 
     ```C++
     psg.write(AY3891x::Enable_Reg, 0x3F);  
-    psg.read(AY3891x::IO_Port_A_Reg;
+    psg.read(AY3891x::IO_Port_A_Reg);
     ```
 
 6. See the library source code and example sketches for other available methods and usage.
@@ -118,6 +115,10 @@ This example sketch plays YM files which are stored on an SD card. The sketch se
 
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
+## Interrupts
+
+The library does not use any interrupts, but briefly disables interrupts during the write pulse to the chip. This is to ensure that the write signal time (`tDW`) is within the 10 us maximum spec. On a 16 MHz ATmega 328, interrupts are disabled for about 4.5 us during each register write.
+
 ## YouTube Videos
 
 My library was featured in two YouTube videos by [Gadget Reboot][11]:
@@ -127,7 +128,13 @@ My library was featured in two YouTube videos by [Gadget Reboot][11]:
 
 ## References
 
-- AY-3-891x [datasheet][1]
+- AY-3-891x Technical Information
+  - Individual Genral Instrument [datasheet][1], unknown publish date
+  - General Instrument [Microelectronics Data Catalog 1980][16], starting at page 7-88 (pdf page 419)
+  - General Instrument [Microelectronics Data Catalog 1982][17], starting at page 5-14 (pdf page 299)
+  - [Data Manual][18]
+  - Microchip individual [datasheet][19], 1992 copyright
+- YM2149 [datasheet][20], 1989 copyright
 - Chiptunes player board [hardware design][9]
 - Details on [finding and converting][6] YM files for use with the example sketches
 - Info from the Synth DIY [wiki][4]
@@ -152,6 +159,11 @@ The software and other files in this repository are released under what is commo
 [13]: https://www.youtube.com/watch?v=b8uAda926so
 [14]: https://www.youtube.com/watch?v=x9Ac49FLJ0c
 [15]: https://github.com/GadgetReboot/AY-3-8910
+[16]: https://www.rsp-italy.it/Electronics/Databooks/General%20Instrument/_contents/General%20Instrument%20Microelectronics%20Data%20Catalog%201980.pdf
+[17]: https://www.rsp-italy.it/Electronics/Databooks/General%20Instrument/_contents/General%20Instrument%20Microelectronics%20Data%20Catalog%201982.pdf
+[18]: https://f.rdw.se/AY-3-8910-datasheet.pdf
+[19]: https://datasheet.datasheetarchive.com/originals/scans/Scans-061/DSA2IH0094116.pdf
+[20]: https://www.ym2149.com/ym2149.pdf
 [100]: https://choosealicense.com/licenses/mit/
 [101]: ./LICENSE.txt
 [//]: # ([200]: https://github.com/Andy4495/AY3891x)

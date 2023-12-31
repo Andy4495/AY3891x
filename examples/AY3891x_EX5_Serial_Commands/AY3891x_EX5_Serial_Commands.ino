@@ -344,7 +344,7 @@ void setup()
   // psg.setAddress(TheChipsAddress);   // Only need this for special-ordered chips with non-default address.
   // Set up a tone on channel A and B to make testing easier.
   // By default, the tone and noise generators are enabled when the chip comes out of reset, I/O pins are set to INPUT
-  psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE);    // Disable the noise
+  psg.write(AY3891x::Enable_Reg, MIXER_NOISES_DISABLE | MIXER_TONE_C_DISABLE);    // Disable the noise and channel C
   psg.write(AY3891x::ChA_Amplitude, 0x04); // Lower amplitude
   psg.write(AY3891x::ChB_Amplitude, 0x08); // Mid amplitude
   Serial.print(F("Configuring note: C4 (middle C)"));
