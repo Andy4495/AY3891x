@@ -129,7 +129,7 @@ My library was featured in two YouTube videos by [Gadget Reboot][11]:
 ## References
 
 - AY-3-891x Technical Information
-  - Individual Genral Instrument [datasheet][1], unknown publish date
+  - Individual General Instrument [datasheet][1], unknown publish date
   - General Instrument [Microelectronics Data Catalog 1980][16], starting at page 7-88 (pdf page 419)
   - General Instrument [Microelectronics Data Catalog 1982][17], starting at page 5-14 (pdf page 299)
   - [Data Manual][18]
