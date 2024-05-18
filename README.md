@@ -126,6 +126,10 @@ My library was featured in two YouTube videos by [Gadget Reboot][11]:
 - [AY-3-8910 Sound Generator with Arduino][13]
 - [AY-3-8910 Sound Generator with Arduino Nano - How it Works][14]
 
+And another video by [NA5Y][21]:
+
+- [AY-3-8910 with ESP32 and Nano][22]
+
 ## References
 
 - AY-3-891x Technical Information
@@ -164,6 +168,8 @@ The software and other files in this repository are released under what is commo
 [18]: https://f.rdw.se/AY-3-8910-datasheet.pdf
 [19]: https://datasheet.datasheetarchive.com/originals/scans/Scans-061/DSA2IH0094116.pdf
 [20]: https://www.ym2149.com/ym2149.pdf
+[21]: https://www.youtube.com/@na5y
+[22]: https://www.youtube.com/watch?v=aTT8PE99mlA
 [100]: https://choosealicense.com/licenses/mit/
 [101]: ./LICENSE.txt
 [//]: # ([200]: https://github.com/Andy4495/AY3891x)
