@@ -165,7 +165,7 @@ The software and other files in this repository are released under what is commo
 [15]: https://github.com/GadgetReboot/AY-3-8910
 [16]: https://www.rsp-italy.it/Electronics/Databooks/General%20Instrument/_contents/General%20Instrument%20Microelectronics%20Data%20Catalog%201980.pdf
 [17]: https://www.rsp-italy.it/Electronics/Databooks/General%20Instrument/_contents/General%20Instrument%20Microelectronics%20Data%20Catalog%201982.pdf
-[18]: https://f.rdw.se/AY-3-8910-datasheet.pdf
+[18]: http://dunfield.classiccmp.org/r/ay38910.pdf
 [19]: https://datasheet.datasheetarchive.com/originals/scans/Scans-061/DSA2IH0094116.pdf
 [20]: https://www.ym2149.com/ym2149.pdf
 [21]: https://www.youtube.com/@na5y
@@ -175,3 +175,4 @@ The software and other files in this repository are released under what is commo
 [//]: # ([200]: https://github.com/Andy4495/AY3891x)
 
 [//]: # (Dead link from older version of README: ymduino project page https://homes.cs.washington.edu/~eqy/ymduino.html)
+[//]: # (Dead link for previous reference [18]: https://f.rdw.se/AY-3-8910-datasheet.pdf)
