@@ -15,6 +15,11 @@ on:
         description: Message to display in job summary
         required: false
         type: string
+      extra-input-files:
+        description: Additional files to scan for links beyond default *.md and **/*.md
+        required: false
+        type: string
+        default: './extras/**/*.md'
       override-args:
         description: Override default arguments (see https://github.com/lycheeverse/lychee#commandline-parameters)
         required: false
@@ -26,6 +31,7 @@ jobs:
     uses: Andy4495/.github/.github/workflows/check-links.yml@main 
     with:
       message: ${{ inputs.message }}
+      extra-input-files: './extras/**/*.md'
       override-args: ${{ inputs.override-args }}
       # Use the following to exclude certain URLs from the check. Need to include "--exclude" in the definition.
       # For example, --exclude '43oh.com'
