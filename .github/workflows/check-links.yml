@@ -26,7 +26,8 @@ jobs:
     uses: Andy4495/.github/.github/workflows/check-links.yml@main 
     with:
       message: ${{ inputs.message }}
-      extra-input-files: './extras/**/*.md'
+      # Additional files to scan for links beyond default *.md **/*.md ./extras/**/*.md
+      extra-input-files: 
       override-args: ${{ inputs.override-args }}
       # Use the following to exclude certain URLs from the check. Need to include "--exclude" in the definition.
       # For example, --exclude '43oh.com'
