@@ -1,7 +1,7 @@
 # AY3891x Library
 
 [![Arduino Compile Sketches](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-compile-sketches.yml/badge.svg)](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-compile-sketches.yml)
-[![Check Markdown Links](https://github.com/Andy4495/AY3891x/actions/workflows/CheckMarkdownLinks.yml/badge.svg)](https://github.com/Andy4495/AY3891x/actions/workflows/CheckMarkdownLinks.yml)
+[![Check Markdown Links](https://github.com/Andy4495/AY3891x/actions/workflows/check-links.yml/badge.svg)](https://github.com/Andy4495/AY3891x/actions/workflows/check-links.yml)
 [![Arduino Lint](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-lint.yml/badge.svg)](https://github.com/Andy4495/AY3891x/actions/workflows/arduino-lint.yml)
 
 Arduino library and chiptunes player for General Instrument AY-3-8910 / AY-3-8912 Programmable Sound Generator (PSG) chip, including clones like the YM2149.
@@ -116,7 +116,7 @@ This example sketch plays YM files which are stored on an SD card. The sketch se
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
 **EX8 - Check Original or Clone**  
-This example attempts to test if the PSG chip is an authentic AY-3-891x chip or a clone (the YM2149). It writes 31 to register 1 and immediatly reads back the value. If it reads back 31, then the chip is probably a clone. If it reads back 15, then it is probably an authentic AY-3-8910. Note, however, that this test makes use of undocumented internal register bits, and this method should not be considered to definitively authenticate whether a chip is actually what its label indicates. For further info, read [Tynemouth blog][21].
+This example attempts to test if the PSG chip is an authentic AY-3-891x chip or a clone (the YM2149). It writes 31 to register 1 and immediatly reads back the value. If it reads back 31, then the chip is probably a clone. If it reads back 15, then it is probably an authentic AY-3-8910. Note, however, that this test makes use of undocumented internal register bits, and this method should not be considered to definitively authenticate whether a chip is actually what its label indicates. For further info, read [Tynemouth blog][31].
 
 ## Interrupts
 
@@ -129,10 +129,15 @@ My library was featured in two YouTube videos by [Gadget Reboot][11]:
 - [AY-3-8910 Sound Generator with Arduino][13]
 - [AY-3-8910 Sound Generator with Arduino Nano - How it Works][14]
 
+Other videos:
+
+- [AY-3-8910 with ESP32 and Nano][22] by [NA5Y][21]
+- [AY-3-8910 VS THE WORLD][24] by [InazumaDenki][25]
+
 ## References
 
 - AY-3-891x Technical Information
-  - Individual Genral Instrument [datasheet][1], unknown publish date
+  - Individual General Instrument [datasheet][1], unknown publish date
   - General Instrument [Microelectronics Data Catalog 1980][16], starting at page 7-88 (pdf page 419)
   - General Instrument [Microelectronics Data Catalog 1982][17], starting at page 5-14 (pdf page 299)
   - [Data Manual][18]
@@ -143,7 +148,8 @@ My library was featured in two YouTube videos by [Gadget Reboot][11]:
 - Info from the Synth DIY [wiki][4]
 - [Summary][5] of the registers (simplified info from datasheet)
 - YMduino [code][8] which provided inspiration for chiptunes example sketches 6 and 7
-- Associated [GitHub repo][15] for the YouTube videos mentioned [above](#youtube-videos)
+- Associated [GitHub repo][15] for the Gadget Reboot YouTube videos mentioned [above](#youtube-videos)
+- Hackaday [article][23] mentioning my library
 
 ## License
 
@@ -164,12 +170,18 @@ The software and other files in this repository are released under what is commo
 [15]: https://github.com/GadgetReboot/AY-3-8910
 [16]: https://www.rsp-italy.it/Electronics/Databooks/General%20Instrument/_contents/General%20Instrument%20Microelectronics%20Data%20Catalog%201980.pdf
 [17]: https://www.rsp-italy.it/Electronics/Databooks/General%20Instrument/_contents/General%20Instrument%20Microelectronics%20Data%20Catalog%201982.pdf
-[18]: https://f.rdw.se/AY-3-8910-datasheet.pdf
+[18]: http://dunfield.classiccmp.org/r/ay38910.pdf
 [19]: https://datasheet.datasheetarchive.com/originals/scans/Scans-061/DSA2IH0094116.pdf
 [20]: https://www.ym2149.com/ym2149.pdf
-[21]: http://blog.tynemouthsoftware.co.uk/2023/01/testing-ay-3-8910-ym2149-sound-card-for-rc2014-and-minstrel-4D.html
+[21]: https://www.youtube.com/@na5y
+[22]: https://www.youtube.com/watch?v=aTT8PE99mlA
+[23]: https://hackaday.com/2024/11/07/hear-a-vintage-sound-chip-mimic-the-real-world/
+[24]: https://www.youtube.com/watch?v=9UH4yG8BpEQ
+[25]: https://www.youtube.com/@inazumadenki5588
+[31]: http://blog.tynemouthsoftware.co.uk/2023/01/testing-ay-3-8910-ym2149-sound-card-for-rc2014-and-minstrel-4D.html
 [100]: https://choosealicense.com/licenses/mit/
 [101]: ./LICENSE.txt
 [//]: # ([200]: https://github.com/Andy4495/AY3891x)
 
 [//]: # (Dead link from older version of README: ymduino project page https://homes.cs.washington.edu/~eqy/ymduino.html)
+[//]: # (Dead link for previous reference [18]: https://f.rdw.se/AY-3-8910-datasheet.pdf)
