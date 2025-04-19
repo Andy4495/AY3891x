@@ -129,7 +129,7 @@ My library was featured in two YouTube videos by [Gadget Reboot][11]:
 - [AY-3-8910 Sound Generator with Arduino][13]
 - [AY-3-8910 Sound Generator with Arduino Nano - How it Works][14]
 
-Other videos:
+Other videos that reference my library:
 
 - [AY-3-8910 with ESP32 and Nano][22] by [NA5Y][21]
 - [AY-3-8910 VS THE WORLD][24] by [InazumaDenki][25]
