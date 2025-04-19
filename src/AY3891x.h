@@ -68,6 +68,7 @@ AY3891x(byte  DA7,  byte DA6, byte DA5, byte DA4, byte DA3, byte DA2, byte DA1, 
   void begin();
   void write(byte regAddr, byte data);
   byte read(byte regAddr);
+  byte writeThenRead(byte regAddr, byte data);
   void resetChip();
   byte findChipAddress();
   void setChipAddress(byte address);

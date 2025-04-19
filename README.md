@@ -115,6 +115,9 @@ This example sketch plays YM files which are stored on an SD card. The sketch se
 
 See this [README][6] for details on finding and converting YM files for use with this sketch.
 
+**EX8 - Check Original or Clone**  
+This example attempts to test if the PSG chip is an authentic AY-3-891x chip or a clone (the YM2149). It writes 31 to register 1 and immediatly reads back the value. If it reads back 31, then the chip is probably a clone. If it reads back 15, then it is probably an authentic AY-3-8910. Note, however, that this test makes use of undocumented internal register bits, and this method should not be considered to definitively authenticate whether a chip is actually what its label indicates. For further info, read [Tynemouth blog][21].
+
 ## Interrupts
 
 The library does not use any interrupts, but briefly disables interrupts during the write pulse to the chip. This is to ensure that the write signal time (`tDW`) is within the 10 us maximum spec. On a 16 MHz ATmega 328, interrupts are disabled for about 4.5 us during each register write.
@@ -164,6 +167,7 @@ The software and other files in this repository are released under what is commo
 [18]: https://f.rdw.se/AY-3-8910-datasheet.pdf
 [19]: https://datasheet.datasheetarchive.com/originals/scans/Scans-061/DSA2IH0094116.pdf
 [20]: https://www.ym2149.com/ym2149.pdf
+[21]: http://blog.tynemouthsoftware.co.uk/2023/01/testing-ay-3-8910-ym2149-sound-card-for-rc2014-and-minstrel-4D.html
 [100]: https://choosealicense.com/licenses/mit/
 [101]: ./LICENSE.txt
 [//]: # ([200]: https://github.com/Andy4495/AY3891x)

@@ -209,6 +209,31 @@ byte AY3891x::read(byte regAddr) {
   return returnData;
 }
 
+byte AY3891x::writeThenRead(byte regAddr, byte data) {
+  // This method writes a value and then immediately reads it back
+  // without latching the address again.
+  byte returnData = 0;
+  latchAddressMode(regAddr);
+  daPinsOutput(data);
+  // The Write Data Pulse Width tDW has a max time of 10 us per some datasheets
+  // tDW = time that WRITE_DATA mode is enabled before going back to INACTIVE
+  //setMode(WRITE_DATA);
+  noInterrupts();
+  mode010to110();
+  //setMode(INACTIVE_010);
+  mode110to010();
+  daPinsInput();
+  mode010to011();
+  for (byte i = 0; i < NUM_DA_LINES; i++) {
+    returnData = returnData | (digitalRead(_DA_pin[i]) << i);
+  }
+  ///setMode(INACTIVE_010);
+  mode011to010();
+  interrupts();
+  return returnData;
+}
+
+
 void AY3891x::daPinsInput() {
   byte i;
 
